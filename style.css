@@ -1,0 +1,92 @@
+/* --- 変数設定 --- */
+:root {
+    --main-bg: #121212;
+    --nav-bg: #1a1a1a;
+    --card-bg: #1e1e1e;
+    --deep-green: #004d40;
+    --accent-green: #2ecc71;
+    --text-white: #e0e0e0;
+}
+
+body {
+    background-color: var(--main-bg);
+    color: var(--text-white);
+    font-family: sans-serif;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- ヘッダー --- */
+header {
+    background: linear-gradient(135deg, var(--deep-green), #00251a);
+    padding: 60px 20px;
+    text-align: center;
+    border-bottom: 4px solid var(--accent-green);
+    margin-top: 60px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+}
+
+/* --- ナビゲーション --- */
+nav {
+    background-color: var(--nav-bg);
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-bottom: 2px solid var(--deep-green);
+    z-index: 1000;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-white);
+    font-weight: bold;
+}
+
+/* --- コンテンツ --- */
+.container { 
+    max-width: 800px; 
+    margin: 40px auto; 
+    padding: 20px; 
+}
+
+.section {
+    background: var(--card-bg);
+    padding: 25px; 
+    border-radius: 10px;
+    margin-bottom: 40px; 
+    border-left: 5px solid var(--deep-green);
+}
+
+h2 { color: var(--accent-green); margin-top: 0; }
+
+/* 管理画面へのリンクボタン風デザイン */
+.admin-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--deep-green);
+    color: var(--accent-green);
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid var(--accent-green);
+}
+
+footer {
+    text-align: center; 
+    padding: 40px;
+    border-top: 1px solid #333;
+}
