@@ -2,11 +2,10 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "images"
+media_folder: "images"          # 画像が保存されるフォルダ
 public_folder: "/images"
 
 collections:
-  # 1. トップページの文字を編集する設定
   - name: "pages"
     label: "ページ編集"
     files:
@@ -16,9 +15,10 @@ collections:
         fields:
           - {label: "メインタイトル", name: "site_title", widget: "string"}
           - {label: "サブタイトル", name: "site_subtitle", widget: "string"}
+          # ↓ここにロゴ画像の項目を追加しました
+          - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
           - {label: "活動紹介文", name: "intro_text", widget: "text"}
 
-  # 2. ブログ記事の設定（さっきのまま残します）
   - name: "blog"
     label: "ブログ記事"
     folder: "blog"
