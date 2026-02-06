@@ -1,64 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>クイズ研究会</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>コンテンツ管理システム</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-    <nav>
-        <a href="#" class="logo-area">
-            <div id="logo-container">
-                <div class="logo-placeholder">Q</div>
-            </div>
-            <span id="site-logo-text">クイズ研究会</span>
-        </a>
-    </nav>
-
-    <header>
-        <h1 id="main-title">読み込み中...</h1>
-        <p id="sub-title">読み込み中...</p>
-    </header>
-
-    <div class="container">
-        <div class="section">
-            <h2>活動紹介</h2>
-            <p id="intro-content">読み込み中...</p>
-            <a href="/admin/" style="color: var(--accent-green); text-decoration: none; border: 1px solid var(--accent-green); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">管理者ログイン</a>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 クイズ研究会</p>
-    </footer>
-
-    <script>
-        fetch('/data/index.json?t=' + new Date().getTime())
-            .then(response => response.json())
-            .then(data => {
-                if(data.site_title) document.getElementById('main-title').innerText = data.site_title;
-                if(data.site_subtitle) document.getElementById('sub-title').innerText = data.site_subtitle;
-                if(data.intro_text) document.getElementById('intro-content').innerText = data.intro_text;
-                
-                // ロゴ画像の反映処理
-                if(data.logo_image) {
-                    const logoContainer = document.getElementById('logo-container');
-                    logoContainer.innerHTML = `<img src="${data.logo_image}" alt="Logo" style="height: 40px; border-radius: 5px; margin-right: 10px;">`;
-                }
-            })
-            .catch(err => console.log(err));
-
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
-                    });
-                }
-            });
-        }
-    </script>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
