@@ -10,9 +10,7 @@
 <body>
     <nav>
         <a href="#" class="logo-area">
-            <div id="logo-container">
-                <div class="logo-placeholder">Q</div>
-            </div>
+            <div class="logo-placeholder">Q</div>
             <span id="site-logo-text">クイズ研究会</span>
         </a>
     </nav>
@@ -35,21 +33,27 @@
     </footer>
 
     <script>
+        // キャッシュを避けるためにURLに時間を追加して読み込む
         fetch('/data/index.json?t=' + new Date().getTime())
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
             .then(data => {
+                // データの存在を確認しながら各要素を書き換え
                 if(data.site_title) document.getElementById('main-title').innerText = data.site_title;
                 if(data.site_subtitle) document.getElementById('sub-title').innerText = data.site_subtitle;
                 if(data.intro_text) document.getElementById('intro-content').innerText = data.intro_text;
-                
-                // ロゴ画像の反映処理
-                if(data.logo_image) {
-                    const logoContainer = document.getElementById('logo-container');
-                    logoContainer.innerHTML = `<img src="${data.logo_image}" alt="Logo" style="height: 40px; border-radius: 5px; margin-right: 10px;">`;
-                }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.error("データの読み込みに失敗しました:", err);
+                // 失敗した時のためのバックアップ表示
+                document.getElementById('main-title').innerText = "QUIZ CLUB";
+                document.getElementById('sub-title').innerText = "正解の先にある、新しい世界へ。";
+                document.getElementById('intro-content').innerText = "管理画面から最初の設定を行ってください。";
+            });
 
+        // ログインウィジェットの設定
         if (window.netlifyIdentity) {
             window.netlifyIdentity.on("init", user => {
                 if (!user) {
