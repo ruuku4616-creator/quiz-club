@@ -1,12 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>コンテンツ管理システム</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズ研究会</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <nav>
+        <a href="#" class="logo-area">
+            <div class="logo-placeholder">Q</div>
+            <span id="site-logo-text">クイズ研究会</span>
+        </a>
+    </nav>
+
+    <header>
+        <h1 id="main-title">QUIZ CLUB</h1>
+        <p id="sub-title">正解の先にある、新しい世界へ。</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>活動紹介</h2>
+            <p id="intro-content">ここに紹介文が表示されます。</p>
+            <a href="/admin/" style="color: var(--accent-green); text-decoration: none; border: 1px solid var(--accent-green); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem;">管理者ログイン</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 クイズ研究会</p>
+    </footer>
+
+    <script>
+        // 管理画面で保存したデータ（JSONファイル）を読み込んで文字を書き換える
+        fetch('/data/index.json')
+            .then(response => response.json())
+            .then(data => {
+                if(data.site_title) document.getElementById('main-title').innerText = data.site_title;
+                if(data.site_subtitle) document.getElementById('sub-title').innerText = data.site_subtitle;
+                if(data.intro_text) document.getElementById('intro-content').innerText = data.intro_text;
+            })
+            .catch(err => console.log("まだ設定データがありません"));
+
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
+    </script>
 </body>
 </html>
