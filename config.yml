@@ -2,16 +2,28 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "images" # 画像保存先
+media_folder: "images"          # 画像が保存されるフォルダ
 public_folder: "/images"
 
 collections:
+  - name: "pages"
+    label: "ページ編集"
+    files:
+      - label: "トップページ"
+        name: "index"
+        file: "data/index.json"
+        fields:
+          - {label: "メインタイトル", name: "site_title", widget: "string"}
+          - {label: "サブタイトル", name: "site_subtitle", widget: "string"}
+          # ↓ここにロゴ画像の項目を追加しました
+          - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
+          - {label: "活動紹介文", name: "intro_text", widget: "text"}
+
   - name: "blog"
     label: "ブログ記事"
-    folder: "blog" # 記事を保存するフォルダ
+    folder: "blog"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "タイトル", name: "title", widget: "string"}
-      - {label: "公開日", name: "date", widget: "datetime"}
+      - {label: "日付", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
