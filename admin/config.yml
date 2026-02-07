@@ -1,5 +1,5 @@
 backend:
-  name: git-gateway
+  name: github
   branch: main
 
 media_folder: "images"
@@ -27,3 +27,4 @@ collections:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
+
