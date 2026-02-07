@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: ruuku4616-creator/quiz-club
+  repo: ruuku4616-creator/quiz-club  # ★ここを自分のものに書き換える（例: tanaka/quiz-app）
   branch: main
-  base_url: https://cms-proxy-alpha.vercel.app # これを使えば自前のapiフォルダは不要です
+  base_url: https://cms-proxy-alpha.vercel.app
 
 media_folder: "images"
 public_folder: "/images"
@@ -10,7 +10,6 @@ public_folder: "/images"
 collections:
   - name: "pages"
     label: "ページ編集"
-    # （以下、以前と同じ内容が続く...）
     files:
       - label: "トップページ"
         name: "index"
@@ -18,17 +17,8 @@ collections:
         fields:
           - {label: "メインタイトル", name: "site_title", widget: "string"}
           - {label: "サブタイトル", name: "site_subtitle", widget: "string"}
+          - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
           - {label: "活動紹介文", name: "intro_text", widget: "text"}
-
-  # 2. ブログ記事の設定（さっきのまま残します）
-  - name: "blog"
-    label: "ブログ記事"
-    folder: "blog"
-    create: true
-    fields:
-      - {label: "タイトル", name: "title", widget: "string"}
-      - {label: "日付", name: "date", widget: "datetime"}
-      - {label: "本文", name: "body", widget: "markdown"}
 
 
 
