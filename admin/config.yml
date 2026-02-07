@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: ユーザー名/リポジトリ名  # ★ここを自分のものに書き換えてください
+  repo: ruuku4616-creator/quiz-club
   branch: main
   base_url: https://cms-proxy-alpha.vercel.app # これを使えば自前のapiフォルダは不要です
 
@@ -29,6 +29,7 @@ collections:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
+
 
 
 
