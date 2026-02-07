@@ -1,14 +1,15 @@
 backend:
   name: github
+  repo: ユーザー名/リポジトリ名  # ★ここを自分のものに書き換えてください
   branch: main
 
 media_folder: "images"
 public_folder: "/images"
 
 collections:
-  # 1. トップページの文字を編集する設定
   - name: "pages"
     label: "ページ編集"
+    # （以下、以前と同じ内容が続く...）
     files:
       - label: "トップページ"
         name: "index"
@@ -27,4 +28,5 @@ collections:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
+
 
