@@ -152,45 +152,47 @@ footer {
 
 .sns-icon { font-size: 2rem; color: var(--text-white); text-decoration: none; }
 
-/* --- ハンバーガーメニューボタンの調整 --- */
+/* --- ハンバーガーメニューボタン --- */
 .menu-btn {
     position: fixed;
-    top: 10px; /* ナビバーの中央に寄せる */
+    top: 10px;
     right: 20px;
-    z-index: 1100; /* ナビバー(1000)より上に */
+    z-index: 2000; /* 最前面に */
     cursor: pointer;
-    background: transparent; /* 背景を透明にしてスッキリさせる */
+    background: var(--accent-green); /* ボタンを分かりやすく緑に */
     padding: 10px;
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
 }
 
 .menu-btn span {
     display: block;
-    width: 30px;
-    height: 2px;
-    background: var(--accent-green); /* 三本線を緑にする */
+    width: 25px;
+    height: 3px;
+    background: white;
     transition: 0.3s;
 }
 
-/* --- メニュー本体のデザイン調整 --- */
+/* --- メニュー本体（右側に隠す） --- */
 .nav-menu {
     position: fixed;
     top: 0;
-    right: -100%; 
+    right: -280px; /* 完全に右側に隠す */
     width: 280px;
-    height: 100%;
-    background: var(--nav-bg); /* ナビと同じ黒にする */
+    height: 100vh;
+    background: var(--nav-bg);
     padding-top: 80px;
-    transition: 0.5s ease-in-out; /* 少しゆっくり動かす */
-    z-index: 1050;
-    border-left: 2px solid var(--deep-green); /* 境界線を入れる */
+    transition: 0.4s ease-in-out;
+    z-index: 1500;
+    border-left: 2px solid var(--accent-green);
     box-shadow: -5px 0 15px rgba(0,0,0,0.5);
 }
 
+/* JavaScriptで 'active' クラスがついた時に表示する */
 .nav-menu.active {
-    right: 0;
+    right: 0 !important; /* 右端を0にして画面内に出す */
 }
 
 .nav-menu ul {
@@ -204,18 +206,16 @@ footer {
     padding: 20px 30px;
     color: var(--text-white);
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     border-bottom: 1px solid #222;
-    transition: 0.3s;
 }
 
 .nav-menu ul li a:hover {
     background: var(--deep-green);
-    color: var(--accent-green);
-    padding-left: 40px; /* ホバー時に少し右に動かすとおしゃれ */
 }
 
-
-
-
+/* もし古い .nav-links という設定が残っていたら、干渉しないように消すか無視する */
+.nav-links {
+    display: none; 
+}
 
