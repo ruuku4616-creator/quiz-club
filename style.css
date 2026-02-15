@@ -108,11 +108,34 @@ th { color: var(--accent-green); }
 .answer { display: none; color: var(--accent-green); font-weight: bold; }
 
 footer {
-    text-align: center; padding: 40px;
-    border-top: 1px solid #333;
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid #eee;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.x-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #333; /* 文字の色 */
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.x-link:hover {
+    color: #1da1f2; /* マウスを乗せた時のX（旧Twitter）っぽい青色 */
 }
 
 .sns-icon { font-size: 2rem; color: var(--text-white); text-decoration: none; }
+
 
 
 
