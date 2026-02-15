@@ -35,18 +35,17 @@
 </section>
 
 </div> <script>
+        // 1. サイト基本データの読み込み（タイトル・ロゴなど）
         async function loadSiteData() {
             try {
                 const response = await fetch('data/index.json');
                 const data = await response.json();
                 
-                // タイトル類の反映
                 document.getElementById('main-title').innerText = data.site_title || "クイズ研究会";
                 document.getElementById('sub-title').innerText = data.site_subtitle || "";
                 document.getElementById('intro-content').innerText = data.intro_text || "";
                 document.getElementById('site-logo-text').innerText = data.site_title || "Shibaura Institute of Quiz";
                 
-                // 【重要】ロゴ画像の復活処理
                 const logoImg = document.getElementById('site-logo-img');
                 const logoPlaceholder = document.getElementById('logo-q-placeholder');
                 if (data.logo_image) {
@@ -54,49 +53,51 @@
                     logoImg.style.display = 'block';
                     if(logoPlaceholder) logoPlaceholder.style.display = 'none';
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Site data load error:", e); }
         }
 
+        // 2. 活動報告の完全自動読み込み
         async function loadBlogPosts() {
-            const repo = "ruuku4616-creator/quiz_club"; // あなたのリポジトリ名
+            const repo = "ruuku4616-creator/quiz_club"; // あなたのリポジトリ
             const folder = "data/blog";
             const listElement = document.getElementById('blog-list');
+
             try {
-        // GitHubのAPIを使って、フォルダ内のファイル一覧を直接取得する
+                // GitHubのAPIを使ってフォルダ内のファイル一覧を取得
                 const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}`);
-            if (!response.ok) throw new Error('一覧の取得に失敗しました');
-                const files = await response.json();
-        listElement.innerHTML = '';
-
-        // ファイル名で並び替え（新しい日付が上にくるように降順にする）
-        files.sort((a, b) => b.name.localeCompare(a.name));
-
-        files.forEach(file => {
-            // .md ファイルだけを表示対象にする
-            if (file.name.endsWith('.md')) {
-                // 拡張子(.md)を消した名前をタイトルとして使用
-                const postName = file.name.replace('.md', '');
+                if (!response.ok) throw new Error();
                 
-                const li = document.createElement('li');
-                // リンク先は blog.html。ファイル名をパラメータとして渡す
-                li.innerHTML = `<a href="blog.html?post=${postName}" style="color: inherit; text-decoration: underline;">${postName}</a>`;
-                listElement.appendChild(li);
-            }
-        });
+                const files = await response.json();
+                listElement.innerHTML = '';
 
-        if (listElement.innerHTML === '') {
-            listElement.innerHTML = '<li>現在、活動報告はありません。</li>';
+                // 日付順（新しい順）に並び替え
+                files.sort((a, b) => b.name.localeCompare(a.name));
+
+                files.forEach(file => {
+                    // .mdファイルだけを抽出
+                    if (file.name.endsWith('.md')) {
+                        const postName = file.name.replace('.md', '');
+                        const li = document.createElement('li');
+                        // リンク先を自動生成
+                        li.innerHTML = `<a href="blog.html?post=${postName}" style="color: inherit; text-decoration: underline;">${postName}</a>`;
+                        listElement.appendChild(li);
+                    }
+                });
+
+                if (files.length === 0) {
+                    listElement.innerHTML = '<li>まだ記事がありません。</li>';
+                }
+            } catch (error) {
+                console.error("Blog load error:", error);
+                listElement.innerHTML = '<li>記事の読み込みに失敗しました（API制限の可能性があります）。</li>';
+            }
         }
 
-    } catch (error) {
-        console.error('自動読み込みエラー:', error);
-        listElement.innerHTML = '<li>活動報告を読み込めませんでした。</li>';
-    }
-}
+        // ページ読み込み時に実行
         window.addEventListener('DOMContentLoaded', () => {
             loadSiteData();
             loadBlogPosts();
         });
     </script>
-
-
+</body>
+</html>
