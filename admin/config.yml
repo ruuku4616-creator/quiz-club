@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: ruuku4616/quiz_club
+  repo: ruuku4616-creator/quiz_club
   branch: main
   base_url: https://cms-proxy-alpha.vercel.app # これが重要です
 
@@ -29,4 +29,5 @@ collections:
         - {label: "日付", name: "date", widget: "datetime"}
         - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
         - {label: "本文", name: "body", widget: "markdown"}
+
 
