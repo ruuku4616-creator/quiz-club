@@ -36,72 +36,33 @@
 
 </div> <script>
         // 1. もともとの「活動紹介」や「タイトル」を読み込む処理
-        async function loadSiteData() {
-            try {
-                const response = await fetch('data/index.json');
-                const data = await response.json();
-                
-                document.getElementById('main-title').innerText = data.site_title || "クイズ研究会";
-                document.getElementById('sub-title').innerText = data.site_subtitle || "";
-                document.getElementById('intro-content').innerText = data.intro_text || "";
-                document.getElementById('site-logo-text').innerText = data.site_title || "Shibaura Institute of Quiz";
-                
-                if (data.logo_image) {
-                    const logoImg = document.getElementById('site-logo-img');
-                    logoImg.src = data.logo_image;
-                    logoImg.style.display = 'block';
-                    document.getElementById('logo-q-placeholder').style.display = 'none';
-                }
-            } catch (e) {
-                console.error("サイトデータの読み込み失敗:", e);
-                // 失敗しても止まらないようにデフォルト値をセット
-                document.getElementById('main-title').innerText = "クイズ研究会";
-            }
-        }
-
-        // 2. 「活動報告」をGitHubから自動取得する処理
         async function loadBlogPosts() {
-            const repo = "ruuku4616-creator/quiz_club";
-            const folder = "data/blog";
-            const listElement = document.getElementById('blog-list');
+    const listElement = document.getElementById('blog-list');
+    
+    // 管理画面で作成したことが分かっている「実際のファイル名」を直接指定します
+    // 記事が増えたらここに足すか、自動取得の仕組みを調整します
+    const posts = [
+        "2026-02-15-クラシックリスニングクイズを行いました。"
+    ];
 
-            try {
-                // GitHub APIでファイル一覧を取得（公開リポジトリならこれでOK）
-                const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}`);
-                
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const files = await response.json();
-                listElement.innerHTML = '';
-
-                if (!Array.isArray(files) || files.length === 0) {
-                    listElement.innerHTML = '<li>まだ記事がありません。</li>';
-                    return;
-                }
-
-                files.forEach(file => {
-                    if (file.name.endsWith('.md') || file.name.endsWith('.json')) {
-                        const displayName = file.name
-                            .replace(/\.md$|\.json$/, '')
-                            .replace(/-/g, ' ');
-
-                        const li = document.createElement('li');
-                        // 記事の内容（rawデータ）を表示するリンク
-                        li.innerHTML = `<a href="https://github.com/${repo}/blob/main/${file.path}" target="_blank">${displayName}</a>`;
-                        listElement.appendChild(li);
-                    }
-                });
-            } catch (error) {
-                console.error('活動報告の読み込み失敗:', error);
-                listElement.innerHTML = '<li>現在、活動報告を読み込めません。</li>';
-            }
+    try {
+        listElement.innerHTML = '';
+        
+        if (posts.length === 0) {
+            listElement.innerHTML = '<li>まだ記事がありません。</li>';
+            return;
         }
 
-        // ページ読み込み時に両方を実行する
-        window.addEventListener('DOMContentLoaded', () => {
-            loadSiteData();
-            loadBlogPosts();
+        posts.forEach(postName => {
+            const li = document.createElement('li');
+            // data/blog フォルダの中にある .md ファイルへのリンク
+            // Netlify上で直接ファイルを参照する形にします
+            const filePath = `data/blog/${postName}.md`;
+            
+            li.innerHTML = `<a href="${filePath}">${postName}</a>`;
+            listElement.appendChild(li);
         });
-    </script>
-</body>
-</html>
+    } catch (error) {
+        listElement.innerHTML = '<li>記事の表示に失敗しました。</li>';
+    }
+}
