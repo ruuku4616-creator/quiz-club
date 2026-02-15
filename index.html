@@ -34,68 +34,41 @@
     </ul>
 </section>
 
-</div> 
-    <script>
-    // 1. トップページのタイトルや紹介文を読み込む
-    async function loadSiteData() {
-        try {
-            const response = await fetch('data/index.json');
-            const data = await response.json();
-            
-            document.getElementById('main-title').innerText = data.site_title || "クイズ研究会";
-            document.getElementById('sub-title').innerText = data.site_subtitle || "";
-            document.getElementById('intro-content').innerText = data.intro_text || "";
-            document.getElementById('site-logo-text').innerText = data.site_title || "Shibaura Institute of Quiz";
-            
-            if (data.logo_image) {
-                const logoImg = document.getElementById('site-logo-img');
-                logoImg.src = data.logo_image;
-                logoImg.style.display = 'block';
-                document.getElementById('logo-q-placeholder').style.display = 'none';
-            }
-        } catch (e) {
-            console.error("データの読み込み失敗:", e);
-            document.getElementById('main-title').innerText = "クイズ研究会";
-            document.getElementById('intro-content').innerText = "データの読み込みに失敗しました。管理画面から設定を確認してください。";
+</div> <script>
+        // 1. 活動紹介などの読み込み
+        async function loadSiteData() {
+            try {
+                const response = await fetch('data/index.json');
+                const data = await response.json();
+                document.getElementById('main-title').innerText = data.site_title || "クイズ研究会";
+                document.getElementById('sub-title').innerText = data.site_subtitle || "";
+                document.getElementById('intro-content').innerText = data.intro_text || "";
+                document.getElementById('site-logo-text').innerText = data.site_title || "Shibaura Institute of Quiz";
+            } catch (e) { console.error(e); }
         }
-    }
 
-    // 2. 活動報告のリストを表示する
-    async function loadBlogPosts() {
-        const listElement = document.getElementById('blog-list');
-        // 新しい記事を書いたら、ここにある名前を増やすことで表示されます
-        const posts = [
-            "2026-02-15-クラシックリスニングクイズを行いました。"
-        ];
-
-        try {
-            listElement.innerHTML = '';
-            if (posts.length === 0) {
-                listElement.innerHTML = '<li>まだ記事がありません。</li>';
-                return;
+        // 2. 活動報告リストの表示
+        async function loadBlogPosts() {
+            const listElement = document.getElementById('blog-list');
+            const posts = ["2026-02-15-クラシックリスニングクイズを行いました。"];
+            try {
+                listElement.innerHTML = '';
+                posts.forEach(postName => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="blog.html?post=${postName}">${postName}</a>`;
+                    listElement.appendChild(li);
+                });
+            } catch (error) {
+                listElement.innerHTML = '<li>記事の表示に失敗しました。</li>';
             }
-
-            posts.forEach(postName => {
-                const li = document.createElement('li');
-                const filePath = `data/blog/${postName}.md`;
-                li.innerHTML = `<a href="blog.html?post=${postName}">${postName}</a>`;
-                listElement.appendChild(li);
-            });
-        } catch (error) {
-            listElement.innerHTML = '<li>記事の表示に失敗しました。</li>';
         }
-    }
 
-    // ★重要★ ページが読み込まれた瞬間に、上の2つのプログラムを実行する命令
-    window.addEventListener('DOMContentLoaded', () => {
-        loadSiteData();
-        loadBlogPosts();
-    });
-</script>
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSiteData();
+            loadBlogPosts();
+        });
+    </script>
 </body>
 </html>
-        listElement.innerHTML = '<li>記事の表示に失敗しました。</li>';
-    }
-}
 
 
