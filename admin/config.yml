@@ -2,8 +2,8 @@ backend:
   name: github
   repo: ruuku4616-creator/quiz_club
   branch: main
-  # ここを新しいURLに書き換え
-  base_url: https://decap-cms-oauth-jbffofnjn-siqs-projects.vercel.app
+  # あなたが今アクセスしたURLを使います
+  base_url: https://decap-cms-oauth-inky.vercel.app
   site_domain: quiz-club-chi.vercel.app
   
 media_folder: "images"
@@ -31,6 +31,7 @@ collections:
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
       - {label: "本文", name: "body", widget: "markdown"}
+
 
 
 
