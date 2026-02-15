@@ -3,7 +3,7 @@ backend:
   repo: ruuku4616-creator/quiz_club
   branch: main
   # あなたが今アクセスしたURLを使います
-  base_url: https://decap-cms-oauth-inky.vercel.app/
+  base_url: https://decap-cms-oauth-de2w.vercel.app
   site_domain: quiz-club-chi.vercel.app
   
 media_folder: "images"
@@ -31,6 +31,7 @@ collections:
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
       - {label: "本文", name: "body", widget: "markdown"}
+
 
 
 
