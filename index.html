@@ -108,24 +108,6 @@
             if (quizFiles.length > 0) {
                 const latestQuiz = quizFiles[0];
                 const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
-                const text = await quizRes.text();
-                // markedを使用してMarkdownをHTMLに変換
-                const htmlContent = marked.parse(text);
-                document.getElementById('top-quiz-question').innerHTML = htmlContent;
-                document.getElementById('top-quiz-answer').innerText = "クリックして回答を表示";
-            }
-        } catch (e) {
-            console.error(e);
-            document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
-        }
-    }
-    async function loadTopQuiz() {
-        try {
-            const response = await fetch('data/quiz-list.json');
-            const quizFiles = await response.json();
-            if (quizFiles.length > 0) {
-                const latestQuiz = quizFiles[0];
-                const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
                 let text = await quizRes.text();
                 
                 // --- 修正1: 管理用データ（--- で囲まれた部分）を削除 ---
@@ -182,6 +164,7 @@
 </script>
 </body>
 </html>
+
 
 
 
