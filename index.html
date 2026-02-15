@@ -6,7 +6,6 @@
     <title>クイズ研究会</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="menu-btn" id="menu-btn">
@@ -61,118 +60,94 @@
         </p>
     </div>
 
-</div> <script>
-        // 1. サイト基本データの読み込み（タイトル・ロゴなど）
-        async function loadSiteData() {
-            try {
-                const response = await fetch('data/index.json');
-                const data = await response.json();
-                
-                document.getElementById('main-title').innerText = data.site_title || "クイズ研究会";
-                document.getElementById('sub-title').innerText = data.site_subtitle || "";
-                document.getElementById('intro-content').innerText = data.intro_text || "";
-                document.getElementById('site-logo-text').innerText = data.site_title || "Shibaura Institute of Quiz";
-                
-                const logoImg = document.getElementById('site-logo-img');
-                const logoPlaceholder = document.getElementById('logo-q-placeholder');
-                if (data.logo_image) {
-                    logoImg.src = data.logo_image;
-                    logoImg.style.display = 'block';
-                    if(logoPlaceholder) logoPlaceholder.style.display = 'none';
-                }
-            } catch (e) { console.error("Site data load error:", e); }
-        }
-
-        // 2. 活動報告の完全自動読み込み
-        async function loadBlogPosts() {
-            const listElement = document.getElementById('blog-list');
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    // 1. サイト基本データの読み込み
+    async function loadSiteData() {
+        try {
+            const response = await fetch('data/index.json');
+            const data = await response.json();
+            document.getElementById('main-title').innerText = data.site_title || "クイズ研究会";
+            document.getElementById('sub-title').innerText = data.site_subtitle || "";
+            document.getElementById('intro-content').innerText = data.intro_text || "";
+            document.getElementById('site-logo-text').innerText = data.site_title || "SIQ";
             
-            try {
-                // 自分のサイト内にある「blog-list.json」というファイルを探しに行く
-                const response = await fetch('data/blog-list.json');
-                if (!response.ok) throw new Error();
-                
-                const posts = await response.json();
-                listElement.innerHTML = '';
-                
-                posts.forEach(postName => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="blog.html?post=${postName}" style="color: inherit; text-decoration: underline;">${postName}</a>`;
-                    listElement.appendChild(li);
-                });
-            } catch (error) {
-                // もし設定ファイルがまだ無い場合は、手動リストを表示（予備）
-                listElement.innerHTML = '<li>記事リストを準備中です。</li>';
+            const logoImg = document.getElementById('site-logo-img');
+            const logoPlaceholder = document.getElementById('logo-q-placeholder');
+            if (data.logo_image) {
+                logoImg.src = data.logo_image;
+                logoImg.style.display = 'block';
+                if(logoPlaceholder) logoPlaceholder.style.display = 'none';
             }
-        }
-        // ページ読み込み時に実行
-        window.addEventListener('DOMContentLoaded', () => {
-            loadSiteData();
-            loadBlogPosts();
-        });
-    </script>
-    
-    <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const navMenu = document.getElementById('nav-menu');
-        
-        menuBtn.addEventListener('click', () => {
-            // 'active' クラスを付けたり消したりする
-            navMenu.classList.toggle('active');
-        });
-        // メニューの外をクリックしたら閉じる
-        document.addEventListener('click', (e) => {
-            if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
-        // クイズの答えを切り替える関数
-        function toggleAnswer(element) {
-            const answer = element.querySelector('.answer');
-            if (answer.style.display === 'block') {
-                answer.style.display = 'none';
-            } else {
-                answer.style.display = 'block';
-            }
-        }
-        async function loadTopQuiz() {
-            try {
-                // クイズの答えを切り替える関数
-        function toggleAnswer(element) {
-            const answer = element.querySelector('.answer');
-            answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
-        }
+        } catch (e) { console.error("Site data load error:", e); }
+    }
 
-        async function loadTopQuiz() {
-            try {
-                const response = await fetch('data/quiz-list.json');
-                const quizFiles = await response.json();
-                
-                if (quizFiles.length > 0) {
-                    const latestQuiz = quizFiles[0];
-                    const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
-                    const text = await quizRes.text();
-                    
-                    // markedを使ってMarkdownをHTMLに変換
-                    const htmlContent = marked.parse(text);
-                    
-                    document.getElementById('top-quiz-question').innerHTML = htmlContent;
-                    document.getElementById('top-quiz-answer').innerText = "クリックして回答を表示";
-                }
-            } catch (e) {
-                console.error(e);
-                document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
-            }
+    // 2. 活動報告の読み込み
+    async function loadBlogPosts() {
+        const listElement = document.getElementById('blog-list');
+        try {
+            const response = await fetch('data/blog-list.json');
+            if (!response.ok) throw new Error();
+            const posts = await response.json();
+            listElement.innerHTML = '';
+            posts.forEach(postName => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="blog.html?post=${postName}" style="color: inherit; text-decoration: underline;">${postName}</a>`;
+                listElement.appendChild(li);
+            });
+        } catch (error) {
+            listElement.innerHTML = '<li>記事リストを準備中です。</li>';
         }
+    }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadSiteData();
-            loadBlogPosts();
-            loadTopQuiz();
-        });
-    </script>
+    // 3. 最新クイズの読み込み
+    async function loadTopQuiz() {
+        try {
+            const response = await fetch('data/quiz-list.json');
+            const quizFiles = await response.json();
+            if (quizFiles.length > 0) {
+                const latestQuiz = quizFiles[0];
+                const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
+                const text = await quizRes.text();
+                // markedを使用してMarkdownをHTMLに変換
+                const htmlContent = marked.parse(text);
+                document.getElementById('top-quiz-question').innerHTML = htmlContent;
+                document.getElementById('top-quiz-answer').innerText = "クリックして回答を表示";
+            }
+        } catch (e) {
+            console.error(e);
+            document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
+        }
+    }
+
+    // 4. メニュー開閉設定
+    const menuBtn = document.getElementById('menu-btn');
+    const navMenu = document.getElementById('nav-menu');
+    menuBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+        if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+            navMenu.classList.remove('active');
+        }
+    });
+
+    // 5. クイズの答え表示切り替え
+    function toggleAnswer(element) {
+        const answer = element.querySelector('.answer');
+        answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // ページ読み込み時にすべて実行
+    window.addEventListener('DOMContentLoaded', () => {
+        loadSiteData();
+        loadBlogPosts();
+        loadTopQuiz();
+    });
+</script>
 </body>
 </html>
+
 
 
 
