@@ -121,13 +121,29 @@ footer {
 }
 
 .x-link {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     text-decoration: none;
-    color: #333; /* 文字の色 */
+    background-color: #000000; /* Xのブランドカラー（黒） */
+    color: #ffffff !important; /* 文字の色を白に固定 */
+    padding: 10px 20px;
+    border-radius: 9999px;    /* カプセル型のボタンにする */
     font-weight: bold;
-    transition: color 0.3s;
+    font-size: 0.9rem;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 少し浮かせた感じにする */
+}
+
+.x-link:hover {
+    background-color: #333333; /* マウスを乗せた時に少し明るくする */
+    transform: translateY(-2px); /* ぴょこっと上に動かす */
+    color: #ffffff !important;
+}
+
+/* SVG（ロゴ）の色も強制的に白にする */
+.x-link svg {
+    fill: #ffffff !important;
 }
 
 .x-link:hover {
@@ -135,6 +151,7 @@ footer {
 }
 
 .sns-icon { font-size: 2rem; color: var(--text-white); text-decoration: none; }
+
 
 
 
