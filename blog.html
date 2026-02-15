@@ -2,22 +2,52 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>活動報告 - クイズ研究会</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* 記事ページ専用の追加デザイン */
+        .article-content {
+            line-height: 1.8;
+            color: #333;
+            text-align: left;
+            margin-top: 20px;
+        }
+        .article-content h1, .article-content h2 {
+            border-bottom: 2px solid var(--accent-green);
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent-green);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .post-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <nav><a href="index.html">← トップへ戻る</a></nav>
     <div class="container">
+        <nav style="padding: 20px 0;">
+            <a href="index.html" class="back-link">← トップページへ戻る</a>
+        </nav>
+
         <article class="section">
-            <h1 id="post-title">読み込み中...</h1>
-            <div id="post-content">記事を読み込んでいます。少々お待ちください。</div>
+            <p class="post-date" id="post-date"></p>
+            <h1 id="post-title" style="font-size: 1.8rem; margin-bottom: 10px;">読み込み中...</h1>
+            <hr>
+            <div id="post-content" class="article-content">記事を読み込んでいます...</div>
         </article>
     </div>
 
     <script>
         async function loadPost() {
-            // URLから「どの記事を読むか」を取得
             const params = new URLSearchParams(window.location.search);
             const postName = params.get('post');
             
@@ -27,15 +57,32 @@
             }
 
             try {
-                // .mdファイルを読み込む
                 const response = await fetch(`data/blog/${postName}.md`);
-                const text = await response.text();
+                let text = await response.text();
                 
-                // マークダウンからHTMLに変換
-                document.getElementById('post-title').innerText = postName;
+                // 【重要】変な文字（フロントマター）を消す処理
+                // --- で囲まれた部分を切り取ります
+                if (text.startsWith('---')) {
+                    const parts = text.split('---');
+                    if (parts.length >= 3) {
+                        // 3番目以降が本文（markdown）
+                        text = parts.slice(2).join('---').trim();
+                    }
+                }
+                
+                // タイトルをファイル名から綺麗にする（日付を取り除くなど）
+                const cleanTitle = postName.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+                const datePart = postName.match(/^\d{4}-\d{2}-\d{2}/);
+
+                document.getElementById('post-title').innerText = cleanTitle;
+                if(datePart) document.getElementById('post-date').innerText = "公開日: " + datePart[0];
+                
+                // マークダウンをHTMLに変換して表示
                 document.getElementById('post-content').innerHTML = marked.parse(text);
+                
             } catch (e) {
-                document.getElementById('post-content').innerText = "読み込みに失敗しました。";
+                console.error(e);
+                document.getElementById('post-content').innerText = "記事の読み込みに失敗しました。";
             }
         }
         loadPost();
