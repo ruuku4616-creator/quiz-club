@@ -105,11 +105,11 @@
         const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
         
-        // ボタンをクリックしたらメニューを開閉する
         menuBtn.addEventListener('click', () => {
+            // 'active' クラスを付けたり消したりする
             navMenu.classList.toggle('active');
         });
-        // メニューの外側をクリックしたら閉じる
+        // メニューの外をクリックしたら閉じる
         document.addEventListener('click', (e) => {
             if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
                 navMenu.classList.remove('active');
@@ -118,6 +118,7 @@
     </script>
 </body>
 </html>
+
 
 
 
