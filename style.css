@@ -107,6 +107,7 @@ table { width: 100%; border-collapse: collapse; }
 th, td { padding: 12px; border-bottom: 1px solid #333; text-align: left; }
 th { color: var(--accent-green); }
 
+/* --- クイズボックスと回答 --- */
 .quiz-box {
     background: #252525;
     padding: 20px;
@@ -123,7 +124,7 @@ th { color: var(--accent-green); }
 }
 
 .answer {
-    display: none; /* 最初は隠す */
+    display: none; /* 初期は非表示 */
     color: var(--accent-green);
     font-weight: bold;
     margin-top: 15px;
@@ -131,61 +132,24 @@ th { color: var(--accent-green); }
     border-top: 1px solid #333;
 }
 
-.answer { display: none; color: var(--accent-green); font-weight: bold; }
-
-footer {
-    padding: 20px 0;
-    text-align: center;
-    border-top: 1px solid #eee;
-}
-
-.footer-content {
+/* --- ロゴエリアの微調整（重なり防止） --- */
+.logo-area {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 10px;
-}
-
-.x-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
     text-decoration: none;
-    background-color: #000000; /* Xのブランドカラー（黒） */
-    color: #ffffff !important; /* 文字の色を白に固定 */
-    padding: 10px 20px;
-    border-radius: 9999px;    /* カプセル型のボタンにする */
-    font-weight: bold;
-    font-size: 0.9rem;
-    transition: transform 0.2s, background-color 0.2s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 少し浮かせた感じにする */
+    color: var(--text-white);
+    max-width: calc(100% - 70px); /* 右側のメニューボタン用のスペースを確保 */
+    overflow: hidden; /* はみ出し防止 */
 }
-
-.x-link:hover {
-    background-color: #333333; /* マウスを乗せた時に少し明るくする */
-    transform: translateY(-2px); /* ぴょこっと上に動かす */
-    color: #ffffff !important;
-}
-
-/* SVG（ロゴ）の色も強制的に白にする */
-.x-link svg {
-    fill: #ffffff !important;
-}
-
-.x-link:hover {
-    color: #1da1f2; /* マウスを乗せた時のX（旧Twitter）っぽい青色 */
-}
-
-.sns-icon { font-size: 2rem; color: var(--text-white); text-decoration: none; }
 
 /* --- ハンバーガーメニューボタン --- */
 .menu-btn {
     position: fixed;
     top: 10px;
     right: 20px;
-    z-index: 2000; /* 最前面に */
+    z-index: 3000; /* メニュー本体(2500)よりもさらに上に */
     cursor: pointer;
-    background: var(--accent-green); /* ボタンを分かりやすく緑に */
+    background: var(--accent-green);
     padding: 10px;
     border-radius: 5px;
     display: flex;
@@ -193,56 +157,25 @@ footer {
     gap: 5px;
 }
 
-.menu-btn span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: white;
-    transition: 0.3s;
-}
-
-/* --- メニュー本体（右側に隠す） --- */
+/* --- メニュー本体 --- */
 .nav-menu {
     position: fixed !important;
     top: 0 !important;
-    left: auto !important;   /* left: 0 を解除 */
-    right: -280px !important; /* 画面の右外へ */
-    width: 280px !important;  /* width: 100% を解除して 280px に */
+    left: auto !important;
+    right: -280px !important; 
+    width: 280px !important; 
     height: 100vh !important;
     background: #000000 !important; 
     padding-top: 80px !important;
     transition: 0.3s ease-out !important;
-    z-index: 2500 !important; /* ボタンより少し背後、でも他より上 */
+    z-index: 2500 !important;
     border-left: 2px solid var(--accent-green) !important;
-    display: block !important; /* もし消えていたら表示させる */
+    display: block !important;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5); /* 影をつけて奥行きを出す */
 }
 
-/* JavaScriptで active がついた時だけ画面内(right:0)に入れる */
 .nav-menu.active {
     right: 0 !important;
-}
-.nav-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.nav-menu ul li a {
-    display: block;
-    padding: 20px 30px;
-    color: var(--text-white);
-    text-decoration: none;
-    font-size: 1.2rem;
-    border-bottom: 1px solid #222;
-}
-
-.nav-menu ul li a:hover {
-    background: var(--deep-green);
-}
-
-/* もし古い .nav-links という設定が残っていたら、干渉しないように消すか無視する */
-.nav-links {
-    display: none; 
 }
 
 
