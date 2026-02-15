@@ -119,6 +119,41 @@
             document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
         }
     }
+    async function loadTopQuiz() {
+        try {
+            const response = await fetch('data/quiz-list.json');
+            const quizFiles = await response.json();
+            if (quizFiles.length > 0) {
+                const latestQuiz = quizFiles[0];
+                const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
+                let text = await quizRes.text();
+                
+                // --- 修正1: 管理用データ（--- で囲まれた部分）を削除 ---
+                // メタデータを取り除く（2番目の --- 以降を本文とする）
+                const parts = text.split('---');
+                let mainContent = "";
+                let answerContent = "クリックして回答を表示";
+                
+                if (parts.length >= 3) {
+                    // index 0,1 はメタデータ用、2が問題、3がある場合はそれが答え
+                    mainContent = parts[2].trim();
+                    if (parts[3]) {
+                        answerContent = parts[3].trim();
+                    }
+                }　else {
+                    // 万が一形式が違う場合の予備処理
+                    mainContent = text;
+                }
+                
+                // --- 修正2: MarkdownをHTMLに変換して反映 ---
+                document.getElementById('top-quiz-question').innerHTML = marked.parse(mainContent);
+                document.getElementById('top-quiz-answer').innerHTML = marked.parse(answerContent);
+            }
+        } catch (e) {
+            console.error(e);
+            document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
+        }
+    }
 
     // 4. メニュー開閉設定
     const menuBtn = document.getElementById('menu-btn');
@@ -147,6 +182,7 @@
 </script>
 </body>
 </html>
+
 
 
 
