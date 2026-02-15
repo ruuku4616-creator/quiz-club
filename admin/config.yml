@@ -1,8 +1,6 @@
 backend:
-  name: github
-  repo: siq-s/quiz-club  # あなたのリポジトリ名に合わせました
+  name: git-gateway
   branch: main
-  base_url: https://cms-proxy-alpha.vercel.app
   site_domain: quiz-club-hh1d48qhy-siqs-projects.vercel.app
 
 media_folder: "images"
@@ -20,3 +18,4 @@ collections:
           - {label: "サブタイトル", name: "site_subtitle", widget: "string"}
           - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
           - {label: "活動紹介文", name: "intro_text", widget: "text"}
+
