@@ -17,33 +17,56 @@
         <h1 style="color: var(--accent-green);">クイズアーカイブ</h1>
         <p>過去に出題された問題に挑戦してみよう！</p>
 
-        <div class="section">
-            <div class="quiz-box" onclick="toggleAnswer(this)">
-                <p><strong>Q. 日本で一番高い山は何でしょう？</strong></p>
-                <p class="answer">A. 富士山</p>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="quiz-box" onclick="toggleAnswer(this)">
-                <p><strong>Q. クイズの語源となったと言われる、ラテン語で「何？」を意味する言葉は何？</strong></p>
-                <p class="answer">A. Quis（クィス）</p>
-            </div>
+        <div id="quiz-container">
+            <p>読み込み中...</p>
         </div>
 
         <a href="index.html" style="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        function toggleAnswer(element) {
-            // クリックされた要素の中にある .answer を探して表示/非表示を切り替える
-            const answer = element.querySelector('.answer');
-            if (answer.style.display === 'block') {
-                answer.style.display = 'none';
-            } else {
-                answer.style.display = 'block';
+        async function loadAllQuizzes() {
+            const container = document.getElementById('quiz-container');
+            try {
+                const response = await fetch('data/quiz-list.json');
+                const quizFiles = await response.json();
+                
+                container.innerHTML = ''; // 読み込み中を消す
+
+                for (const fileName of quizFiles) {
+                    const res = await fetch(`data/quiz/${fileName}.md`);
+                    const text = await res.text();
+                    
+                    const parts = text.split('---');
+                    if (parts.length >= 3) {
+                        // 2番目の---の後が問題、3番目の---の後が答え
+                        const question = marked.parse(parts[2].trim());
+                        const answer = marked.parse(parts[3] ? parts[3].trim() : "回答が設定されていません");
+                        
+                        const section = document.createElement('div');
+                        section.className = 'section';
+                        section.innerHTML = `
+                            <div class="quiz-box" onclick="toggleAnswer(this)">
+                                <div>${question}</div>
+                                <div class="answer">${answer}</div>
+                            </div>
+                        `;
+                        container.appendChild(section);
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = '<p>クイズを読み込めませんでした。管理画面からクイズを投稿してください。</p>';
             }
         }
+
+        function toggleAnswer(element) {
+            const answer = element.querySelector('.answer');
+            answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+        }
+
+        window.addEventListener('DOMContentLoaded', loadAllQuizzes);
     </script>
 </body>
 </html>
