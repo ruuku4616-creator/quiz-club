@@ -184,28 +184,24 @@ footer {
 
 /* --- メニュー本体（右側に隠す） --- */
 .nav-menu {
-    position: fixed;
-    top: 0;
-    right: -280px; /* ここを px 指定で確実に隠す */
-    width: 280px;
-    height: 100vh;
-    background: #000000; /* 確実に真っ黒にする */
-    padding-top: 80px;
-    transition: 0.3s ease-out; /* スピードを少し速めに */
-    z-index: 2000; /* ボタン(2100)のすぐ下、他の要素より上 */
-    border-left: 2px solid var(--accent-green);
+    position: fixed !important;
+    top: 0 !important;
+    left: auto !important;   /* left: 0 を解除 */
+    right: -280px !important; /* 画面の右外へ */
+    width: 280px !important;  /* width: 100% を解除して 280px に */
+    height: 100vh !important;
+    background: #000000 !important; 
+    padding-top: 80px !important;
+    transition: 0.3s ease-out !important;
+    z-index: 2500 !important; /* ボタンより少し背後、でも他より上 */
+    border-left: 2px solid var(--accent-green) !important;
+    display: block !important; /* もし消えていたら表示させる */
 }
 
 /* JavaScriptで active がついた時だけ画面内(right:0)に入れる */
 .nav-menu.active {
     right: 0 !important;
 }
-
-/* JavaScriptで 'active' クラスがついた時に表示する */
-.nav-menu.active {
-    right: 0 !important; /* 右端を0にして画面内に出す */
-}
-
 .nav-menu ul {
     list-style: none;
     padding: 0;
@@ -229,5 +225,6 @@ footer {
 .nav-links {
     display: none; 
 }
+
 
 
