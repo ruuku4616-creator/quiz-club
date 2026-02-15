@@ -6,6 +6,7 @@
     <title>クイズ研究会</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="menu-btn" id="menu-btn">
@@ -134,27 +135,27 @@
                 answer.style.display = 'block';
             }
         }
-        // 初期表示用のサンプルクイズ（後でCMS連動も可能です）
-        document.getElementById('main-quiz-question').innerHTML = "<strong>Q. 日本で一番高い山は何でしょう？</strong>";
-        document.getElementById('main-quiz-answer').innerText = "A. 富士山";
         async function loadTopQuiz() {
             try {
-                // Netlifyがビルド時に作るクイズリスト（後で作ります）を読み込む
+                // クイズの答えを切り替える関数
+        function toggleAnswer(element) {
+            const answer = element.querySelector('.answer');
+            answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+        }
+
+        async function loadTopQuiz() {
+            try {
                 const response = await fetch('data/quiz-list.json');
                 const quizFiles = await response.json();
                 
                 if (quizFiles.length > 0) {
-                    // 一番新しい（リストの最初）のクイズ名を取得
                     const latestQuiz = quizFiles[0];
-                    
-                    // そのクイズのファイルを読み込む
                     const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
                     const text = await quizRes.text();
                     
-                    // Markdownから中身を抽出（markedを使って変換）
+                    // markedを使ってMarkdownをHTMLに変換
                     const htmlContent = marked.parse(text);
-            
-                    // 表示を更新（QとAが混ざっているので、そのまま流し込むか、分割して表示）
+                    
                     document.getElementById('top-quiz-question').innerHTML = htmlContent;
                     document.getElementById('top-quiz-answer').innerText = "クリックして回答を表示";
                 }
@@ -163,15 +164,16 @@
                 document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
             }
         }
-        // 既存の window.addEventListener 内に loadTopQuiz(); を追加
+
         window.addEventListener('DOMContentLoaded', () => {
             loadSiteData();
             loadBlogPosts();
-            loadTopQuiz(); // これを追加
+            loadTopQuiz();
         });
     </script>
 </body>
 </html>
+
 
 
 
