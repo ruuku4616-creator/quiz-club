@@ -45,6 +45,17 @@
                 if(data.site_title) document.getElementById('main-title').innerText = data.site_title;
                 if(data.site_subtitle) document.getElementById('sub-title').innerText = data.site_subtitle;
                 if(data.intro_text) document.getElementById('intro-content').innerText = data.intro_text;
+
+                // --- ここから追加：ロゴ画像の処理 ---
+                if(data.logo_image) {
+                    const logoImg = document.getElementById('site-logo-img');
+                    const placeholder = document.getElementById('logo-q-placeholder');
+                    
+                    logoImg.src = data.logo_image;
+                    logoImg.style.display = 'block'; // 画像を表示
+                    if(placeholder) placeholder.style.display = 'none'; // 「Q」を隠す
+                }
+                // --- ここまで追加 ---
             })
             .catch(err => {
                 console.error("データの読み込みに失敗しました:", err);
@@ -67,4 +78,5 @@
     </script>
 </body>
 </html>
+
 
