@@ -152,63 +152,69 @@ footer {
 
 .sns-icon { font-size: 2rem; color: var(--text-white); text-decoration: none; }
 
-/* ハンバーガーメニューのスタイル */
+/* --- ハンバーガーメニューボタンの調整 --- */
 .menu-btn {
     position: fixed;
-    top: 20px;
+    top: 10px; /* ナビバーの中央に寄せる */
     right: 20px;
-    z-index: 100;
+    z-index: 1100; /* ナビバー(1000)より上に */
     cursor: pointer;
-    background: var(--accent-green);
+    background: transparent; /* 背景を透明にしてスッキリさせる */
     padding: 10px;
-    border-radius: 5px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
 }
 
 .menu-btn span {
     display: block;
-    width: 25px;
-    height: 3px;
-    background: white;
+    width: 30px;
+    height: 2px;
+    background: var(--accent-green); /* 三本線を緑にする */
     transition: 0.3s;
 }
 
-/* メニューの中身 */
+/* --- メニュー本体のデザイン調整 --- */
 .nav-menu {
     position: fixed;
     top: 0;
-    right: -100%; /* 最初は画面の外に隠す */
-    width: 250px;
+    right: -100%; 
+    width: 280px;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: var(--nav-bg); /* ナビと同じ黒にする */
     padding-top: 80px;
-    transition: 0.3s;
-    z-index: 99;
+    transition: 0.5s ease-in-out; /* 少しゆっくり動かす */
+    z-index: 1050;
+    border-left: 2px solid var(--deep-green); /* 境界線を入れる */
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
 }
 
 .nav-menu.active {
-    right: 0; /* クリックしたら出てくる */
+    right: 0;
 }
 
 .nav-menu ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .nav-menu ul li a {
     display: block;
-    padding: 15px 25px;
-    color: white;
+    padding: 20px 30px;
+    color: var(--text-white);
     text-decoration: none;
-    font-size: 1.2rem;
-    border-bottom: 1px solid #333;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #222;
+    transition: 0.3s;
 }
 
 .nav-menu ul li a:hover {
-    background: var(--accent-green);
+    background: var(--deep-green);
+    color: var(--accent-green);
+    padding-left: 40px; /* ホバー時に少し右に動かすとおしゃれ */
 }
+
 
 
 
