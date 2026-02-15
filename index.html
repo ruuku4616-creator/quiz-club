@@ -78,7 +78,7 @@
             posts.forEach(postName => {
                 const li = document.createElement('li');
                 const filePath = `data/blog/${postName}.md`;
-                li.innerHTML = `<a href="${filePath}">${postName}</a>`;
+                li.innerHTML = `<a href="blog.html?post=${postName}">${postName}</a>`;
                 listElement.appendChild(li);
             });
         } catch (error) {
@@ -97,4 +97,5 @@
         listElement.innerHTML = '<li>記事の表示に失敗しました。</li>';
     }
 }
+
 
