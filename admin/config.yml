@@ -28,20 +28,12 @@ collections:
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
       - {label: "本文", name: "body", widget: "markdown"}
- 
   - name: "quiz"
     label: "SIQ今日の一問"
     folder: "data/quiz"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{title}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # slugに変更
     fields:
       - {label: "タイトル（管理用）", name: "title", widget: "string"}
       - {label: "問題文と回答", name: "body", widget: "markdown"}
-
-
-
-
-
-
-
-
+ 
