@@ -100,14 +100,16 @@
             loadBlogPosts();
         });
     </script>
+    
     <script>
         const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
         
+        // ボタンをクリックしたらメニューを開閉する
         menuBtn.addEventListener('click', () => {
             navMenu.classList.toggle('active');
         });
-        // メニュー以外をクリックしたら閉じる設定
+        // メニューの外側をクリックしたら閉じる
         document.addEventListener('click', (e) => {
             if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
                 navMenu.classList.remove('active');
@@ -116,6 +118,7 @@
     </script>
 </body>
 </html>
+
 
 
 
