@@ -35,19 +35,28 @@
 </section>
 
 </div> <script>
-        // 1. 活動紹介などの読み込み
         async function loadSiteData() {
             try {
                 const response = await fetch('data/index.json');
                 const data = await response.json();
+                
+                // タイトル類の反映
                 document.getElementById('main-title').innerText = data.site_title || "クイズ研究会";
                 document.getElementById('sub-title').innerText = data.site_subtitle || "";
                 document.getElementById('intro-content').innerText = data.intro_text || "";
                 document.getElementById('site-logo-text').innerText = data.site_title || "Shibaura Institute of Quiz";
+                
+                // 【重要】ロゴ画像の復活処理
+                const logoImg = document.getElementById('site-logo-img');
+                const logoPlaceholder = document.getElementById('logo-q-placeholder');
+                if (data.logo_image) {
+                    logoImg.src = data.logo_image;
+                    logoImg.style.display = 'block';
+                    if(logoPlaceholder) logoPlaceholder.style.display = 'none';
+                }
             } catch (e) { console.error(e); }
         }
 
-        // 2. 活動報告リストの表示
         async function loadBlogPosts() {
             const listElement = document.getElementById('blog-list');
             const posts = ["2026-02-15-クラシックリスニングクイズを行いました。"];
@@ -55,7 +64,8 @@
                 listElement.innerHTML = '';
                 posts.forEach(postName => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<a href="blog.html?post=${postName}">${postName}</a>`;
+                    // リンクに style.css の色を適用するため、クラスや直書きスタイルを追加
+                    li.innerHTML = `<a href="blog.html?post=${postName}" style="color: inherit; text-decoration: underline;">${postName}</a>`;
                     listElement.appendChild(li);
                 });
             } catch (error) {
@@ -68,7 +78,4 @@
             loadBlogPosts();
         });
     </script>
-</body>
-</html>
-
 
