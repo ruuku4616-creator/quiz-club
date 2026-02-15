@@ -20,16 +20,12 @@ collections:
           - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
           - {label: "活動紹介文", name: "intro_text", widget: "text"}
   - name: "blog"
-      label: "活動報告"
-      folder: "data/blog" # 記事データが保存されるフォルダ
-      create: true        # 新規作成を許可
-      slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-      fields:
-        - {label: "タイトル", name: "title", widget: "string"}
-        - {label: "日付", name: "date", widget: "datetime"}
-        - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
-        - {label: "本文", name: "body", widget: "markdown"}
-
-
-
-
+    label: "活動報告"
+    folder: "data/blog" # 記事データが保存されるフォルダ
+    create: true        # 新規作成を許可
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "タイトル", name: "title", widget: "string"}
+      - {label: "日付", name: "date", widget: "datetime"}
+      - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
+      - {label: "本文", name: "body", widget: "markdown"}
