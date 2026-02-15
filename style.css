@@ -32,6 +32,7 @@ header h1 {
 }
 
 /* --- ナビゲーション --- */
+/* --- ナビゲーションバー全体の調整 --- */
 nav {
     background-color: var(--nav-bg);
     height: 60px;
@@ -41,11 +42,17 @@ nav {
     left: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* ここを調整：ロゴは左、ボタンは右に配置するため */
+    justify-content: flex-start; 
     padding: 0 20px;
     box-sizing: border-box;
     border-bottom: 2px solid var(--deep-green);
-    z-index: 1000;
+    z-index: 1000; /* バー自体は1000 */
+}
+
+/* もし .nav-links という名前の古い設定が残っていたら、これを追加して無効化してください */
+.nav-links {
+    display: none !important;
 }
 
 .logo-area {
@@ -179,15 +186,19 @@ footer {
 .nav-menu {
     position: fixed;
     top: 0;
-    right: -280px; /* 完全に右側に隠す */
+    right: -280px; /* ここを px 指定で確実に隠す */
     width: 280px;
     height: 100vh;
-    background: var(--nav-bg);
+    background: #000000; /* 確実に真っ黒にする */
     padding-top: 80px;
-    transition: 0.4s ease-in-out;
-    z-index: 1500;
+    transition: 0.3s ease-out; /* スピードを少し速めに */
+    z-index: 2000; /* ボタン(2100)のすぐ下、他の要素より上 */
     border-left: 2px solid var(--accent-green);
-    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+}
+
+/* JavaScriptで active がついた時だけ画面内(right:0)に入れる */
+.nav-menu.active {
+    right: 0 !important;
 }
 
 /* JavaScriptで 'active' クラスがついた時に表示する */
@@ -218,4 +229,5 @@ footer {
 .nav-links {
     display: none; 
 }
+
 
