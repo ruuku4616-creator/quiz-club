@@ -6,7 +6,6 @@ backend:
 
 media_folder: "images"
 public_folder: "/images"
-
 collections:
   - name: "pages"
     label: "ページ編集"
@@ -15,18 +14,18 @@ collections:
         name: "index"
         file: "data/index.json"
         fields:
-          - {label: "メインタイトル", name: "site_title", widget: "string"}
-          - {label: "サブタイトル", name: "site_subtitle", widget: "string"}
-          - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
+          - {label: "サイトタイトル", name: "site_title", widget: "string"}
+          - {label: "キャッチコピー", name: "site_subtitle", widget: "string"}
           - {label: "活動紹介文", name: "intro_text", widget: "text"}
+          - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
+
   - name: "blog"
     label: "活動報告"
-    folder: "data/blog" # 記事データが保存されるフォルダ
-    create: true        # 新規作成を許可
+    folder: "data/blog"
+    create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
       - {label: "本文", name: "body", widget: "markdown"}
-
