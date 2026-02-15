@@ -108,8 +108,27 @@ th, td { padding: 12px; border-bottom: 1px solid #333; text-align: left; }
 th { color: var(--accent-green); }
 
 .quiz-box {
-    background: #252525; padding: 15px; border-radius: 5px;
-    border: 1px dashed var(--accent-green); cursor: pointer;
+    background: #252525;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px dashed var(--accent-green);
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 15px 0;
+}
+
+.quiz-box:hover {
+    background: #2a2a2a;
+    border-style: solid;
+}
+
+.answer {
+    display: none; /* 最初は隠す */
+    color: var(--accent-green);
+    font-weight: bold;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
 }
 
 .answer { display: none; color: var(--accent-green); font-weight: bold; }
@@ -225,6 +244,7 @@ footer {
 .nav-links {
     display: none; 
 }
+
 
 
 
