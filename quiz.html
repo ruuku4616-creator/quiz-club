@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズ閲覧 - クイズ研究会</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo-area">
+            <span id="site-logo-text">Shibaura Institute of Quiz</span>
+        </a>
+    </nav>
+
+    <div class="container" style="margin-top: 80px;">
+        <h1 style="color: var(--accent-green);">クイズアーカイブ</h1>
+        <p>過去に出題された問題に挑戦してみよう！</p>
+
+        <div class="section">
+            <div class="quiz-box" onclick="toggleAnswer(this)">
+                <p><strong>Q. 日本で一番高い山は何でしょう？</strong></p>
+                <p class="answer">A. 富士山</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="quiz-box" onclick="toggleAnswer(this)">
+                <p><strong>Q. クイズの語源となったと言われる、ラテン語で「何？」を意味する言葉は何？</strong></p>
+                <p class="answer">A. Quis（クィス）</p>
+            </div>
+        </div>
+
+        <a href="index.html" style="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
+    </div>
+
+    <script>
+        function toggleAnswer(element) {
+            // クリックされた要素の中にある .answer を探して表示/非表示を切り替える
+            const answer = element.querySelector('.answer');
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+            } else {
+                answer.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
