@@ -1,7 +1,7 @@
 /* --- 変数設定 --- */
 :root {
     --main-bg: #121212;
-    --nav-bg: #1a1a1a;
+    --nav-bg: #000000;
     --card-bg: #1e1e1e;
     --deep-green: #004d40;
     --accent-green: #2ecc71;
@@ -19,7 +19,7 @@ body {
 /* --- ヘッダー（太さを復活） --- */
 header {
     background: linear-gradient(135deg, var(--deep-green), #00251a);
-    padding: 50px 20px; /* 上下の余白を大きくして太くしました */
+    padding: 100px 20px; /* 上下の余白を大きくして太くしました */
     text-align: center;
     border-bottom: 4px solid var(--accent-green);
     margin-top: 60px; /* ナビの高さ分空ける */
@@ -111,4 +111,5 @@ footer {
     text-align: center; padding: 40px;
     border-top: 1px solid #333;
 }
+
 .sns-icon { font-size: 2rem; color: var(--text-white); text-decoration: none; }
