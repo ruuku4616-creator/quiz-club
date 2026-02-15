@@ -58,41 +58,26 @@
 
         // 2. 活動報告の完全自動読み込み
         async function loadBlogPosts() {
-            const repo = "ruuku4616-creator/quiz_club"; // あなたのリポジトリ
-            const folder = "data/blog";
             const listElement = document.getElementById('blog-list');
-
+            
             try {
-                // GitHubのAPIを使ってフォルダ内のファイル一覧を取得
-                const response = await fetch(`https://api.github.com/repos/${repo}/contents/${folder}`);
+                // 自分のサイト内にある「blog-list.json」というファイルを探しに行く
+                const response = await fetch('data/blog-list.json');
                 if (!response.ok) throw new Error();
                 
-                const files = await response.json();
+                const posts = await response.json();
                 listElement.innerHTML = '';
-
-                // 日付順（新しい順）に並び替え
-                files.sort((a, b) => b.name.localeCompare(a.name));
-
-                files.forEach(file => {
-                    // .mdファイルだけを抽出
-                    if (file.name.endsWith('.md')) {
-                        const postName = file.name.replace('.md', '');
-                        const li = document.createElement('li');
-                        // リンク先を自動生成
-                        li.innerHTML = `<a href="blog.html?post=${postName}" style="color: inherit; text-decoration: underline;">${postName}</a>`;
-                        listElement.appendChild(li);
-                    }
+                
+                posts.forEach(postName => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="blog.html?post=${postName}" style="color: inherit; text-decoration: underline;">${postName}</a>`;
+                    listElement.appendChild(li);
                 });
-
-                if (files.length === 0) {
-                    listElement.innerHTML = '<li>まだ記事がありません。</li>';
-                }
             } catch (error) {
-                console.error("Blog load error:", error);
-                listElement.innerHTML = '<li>記事の読み込みに失敗しました（API制限の可能性があります）。</li>';
+                // もし設定ファイルがまだ無い場合は、手動リストを表示（予備）
+                listElement.innerHTML = '<li>記事リストを準備中です。</li>';
             }
         }
-
         // ページ読み込み時に実行
         window.addEventListener('DOMContentLoaded', () => {
             loadSiteData();
@@ -101,3 +86,4 @@
     </script>
 </body>
 </html>
+
