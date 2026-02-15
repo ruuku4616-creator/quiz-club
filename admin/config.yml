@@ -2,8 +2,8 @@ backend:
   name: github
   repo: ruuku4616-creator/quiz_club
   branch: main
-  base_url: https://cms-proxy-alpha.vercel.app
-  site_domain: https://quiz-club-git-main-siqs-projects.vercel.app/
+  base_url: https://cms-proxy-alpha.vercel.app # ← 最後に / は入れない！
+  site_domain: quiz-club-chi.vercel.app       # ← https:// も最後の / も入れない！
   
 media_folder: "images"
 public_folder: "/images"
@@ -30,4 +30,5 @@ collections:
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
       - {label: "本文", name: "body", widget: "markdown"}
+
 
