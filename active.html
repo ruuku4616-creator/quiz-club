@@ -119,13 +119,14 @@
         menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadSiteData(); // ★これを追加
-            loadMemberList();
-            setupMenu();
+            loadSiteData(); // ロゴ読み込み
+            loadList();     // 活動報告一覧読み込み（関数名に合わせました）
+            // setupMenu() は定義されていないので削除か、別途定義が必要です
         });
     </script>
 </body>
 </html>
+
 
 
 
