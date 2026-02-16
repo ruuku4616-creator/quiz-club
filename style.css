@@ -186,6 +186,22 @@ th { color: var(--accent-green); }
     right: 0 !important;
 }
 
+/* --- ナビゲーションメニュー内のリンク色設定 --- */
+.nav-menu ul li a {
+    display: block;
+    padding: 20px 30px;
+    color: var(--text-white) !important; /* 強制的に白にする */
+    text-decoration: none; /* 下線を消す */
+    font-size: 1.1rem;
+    border-bottom: 1px solid #222;
+    transition: background 0.3s;
+}
+
+/* マウスを乗せた（ホバー）時の挙動 */
+.nav-menu ul li a:hover {
+    background: var(--deep-green);
+    color: var(--accent-green) !important; /* ホバー時にアクセントカラーにする */
+}
 
 
 
