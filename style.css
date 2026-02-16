@@ -320,6 +320,24 @@ th { color: var(--accent-green); }
     h1 { font-size: 1.5rem !important; }
     h2 { font-size: 1.25rem; }
 }
+/* PCでは改行を隠す */
+.sp-only {
+    display: none;
+}
+
+/* スマホ（画面幅768px以下）では改行を有効にする */
+@media (max-width: 768px) {
+    .sp-only {
+        display: inline;
+    }
+    
+    /* 改行を許可するため nowrap を解除する */
+    #site-logo-text {
+        white-space: normal !important;
+        display: inline-block;
+        line-height: 1.2; /* 行間を少し詰める */
+    }
+}
 
 
 
