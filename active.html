@@ -135,12 +135,13 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             loadSiteData(); // ロゴ読み込み
-            loadList();     // 活動報告一覧読み込み（関数名に合わせました）
-            // setupMenu() は定義されていないので削除か、別途定義が必要です
+            loadList();     // 活動報告一覧読み込み
+            setupMenu();    // ★ここを追加！これでメニューが動くようになります
         });
     </script>
 </body>
 </html>
+
 
 
 
