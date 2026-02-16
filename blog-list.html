@@ -37,36 +37,40 @@
     </div>
 
     <script>
-    // 1. 部員ブログ一覧の読み込み
-    // 1. 部員ブログ一覧の読み込み
     async function loadMemberList() {
         const list = document.getElementById('member-blog-list');
         try {
             const response = await fetch('data/member-list.json');
-            if (!response.ok) throw new Error();
             const posts = await response.json();
             
             list.innerHTML = '';
-            // 例：blog-list.html の場
-            posts.forEach(name => {
+            // 記事ごとに詳細データを読み込んで画像を取得する
+            for (const name of posts) {
+                let thumbUrl = "images/default-thumb.jpg"; // 画像がない時の予備
+                try {
+                // 各記事のファイル（.md）を一時的に読み取って画像URLを探す
+                    const postRes = await fetch(`data/members_blog/${name}.md`);
+                    const postText = await postRes.text();
+                    // メタデータから thumbnail: "..." の部分を抜き出す
+                    const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
+                    if (thumbMatch && thumbMatch[1]) {
+                        thumbUrl = thumbMatch[1];
+                    }
+                } catch (e) { console.log("画像なし:", name); }
                 const card = document.createElement('a');
-                card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`; // folder名は各ファイルに合わせる
+                card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`;
                 card.className = 'post-card';
-                
                 card.innerHTML = `
+                <img src="${thumbUrl}" class="post-card-thumb" alt="${name}" onerror="this.src='https://via.placeholder.com/300x160?text=No+Image'">
                 <div class="post-card-content">
                 <h3 class="post-card-title">${name}</h3>
-                <div class="post-card-meta">記事を読む →</div>
+                <div class="post-card-meta">記事を詳しく読む →</div>
                 </div>
                 `;
                 list.appendChild(card);
-            });
-
-// リストの親要素（ULなど）のIDを囲む部分に class="post-grid" を追加するのも忘れずに！
-// 例： <div id="member-blog-list" class="post-grid"></div>
+            }
         } catch (e) {
-            console.error(e);
-            list.innerHTML = '<li>記事がまだありません。</li>';
+            list.innerHTML = '<p>記事がまだありません。</p>';
         }
     }
     // 2. メニュー開閉の設定（★ここを追加しました）
