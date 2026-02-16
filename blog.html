@@ -130,10 +130,25 @@ async function loadSiteData() {
 }
         
 
-        // メニュー開閉設定
-        const menuBtn = document.getElementById('menu-btn');
-        const navMenu = document.getElementById('nav-menu');
-        menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+        function setupMenu() {
+    const menuBtn = document.getElementById('menu-btn');
+    const navMenu = document.getElementById('nav-menu');
+    
+    if (menuBtn && navMenu) {
+        // ボタンクリックで開閉
+        menuBtn.onclick = (e) => {
+            e.stopPropagation(); // 背景クリック連動を防ぐ
+            navMenu.classList.toggle('active');
+        };
+
+        // メニュー以外の場所（背景）をタップしたら閉じる
+        document.onclick = (e) => {
+            if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        };
+    }
+}
 
         window.addEventListener('DOMContentLoaded', () => {
             loadSiteData(); // ロゴ読み込み
