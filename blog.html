@@ -44,51 +44,63 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         async function loadBlogPost() {
-            const params = new URLSearchParams(window.location.search);
-            const postName = params.get('post');
-            const folderName = params.get('folder') || 'blog';
+    const params = new URLSearchParams(window.location.search);
+    const postName = params.get('post');
+    const folderName = params.get('folder') || 'blog';
 
-            if (!postName) return;
+    if (!postName) return;
 
-            try {
-                const response = await fetch(`data/${folderName}/${postName}.md`);
-                if (!response.ok) throw new Error("File not found");
-                
-                const text = await response.text();
-                const parts = text.split('---');
-                
-                if (parts.length >= 3) {
-                    // --- メタデータから各項目を抽出 ---
-                    const meta = parts[1];
-                    const titleMatch = meta.match(/title:\s*(.*)/);
-                    const dateMatch = meta.match(/date:\s*(.*)/);
-                    const authorMatch = meta.match(/author:\s*(.*)/); // ★投稿者名を抽出
+    try {
+        // キャッシュを避けるためにランダムな数字を付けて最新版を取得
+        const response = await fetch(`data/${folderName}/${postName}.md?v=${new Date().getTime()}`);
+        if (!response.ok) throw new Error("File not found");
+        
+        const text = await response.text();
+        
+        // --- 修正ポイント：メタデータと本文を確実に分ける ---
+        // 最初の --- と 二番目の --- を探す
+        const parts = text.split('---');
+        
+        if (parts.length >= 3) {
+            // parts[1] にタイトルなどの設定が入っている
+            const meta = parts[1];
+            
+            // 各項目を抽出（正規表現でより正確に）
+            const titleMatch = meta.match(/title:\s*["']?(.*?)["']?(\n|$)/);
+            const authorMatch = meta.match(/author:\s*["']?(.*?)["']?(\n|$)/);
+            const dateMatch = meta.match(/date:\s*["']?(.*?)["']?(\n|$)/);
 
-                    // タイトルの反映
-                    document.getElementById('post-title').innerText = titleMatch ? titleMatch[1].replace(/"/g, '') : postName;
-                    
-                    // 投稿者名の反映
-                    if (authorMatch) {
-                        document.getElementById('post-author').innerText = "投稿者: " + authorMatch[1].replace(/"/g, '');
-                    }
-
-                    // 日付の反映
-                    if (dateMatch) {
-                        document.getElementById('post-date').innerText = "投稿日: " + dateMatch[1].substring(0, 10);
-                    }
-
-                    // 本文の反映
-                    const content = parts.slice(2).join('---').trim();
-                    document.getElementById('post-content').innerHTML = marked.parse(content);
-                } else {
-                    document.getElementById('post-title').innerText = postName;
-                    document.getElementById('post-content').innerHTML = marked.parse(text);
-                }
-            } catch (e) {
-                document.getElementById('post-title').innerText = "エラー";
-                document.getElementById('post-content').innerText = "記事が見つかりませんでした。";
+            // タイトルの反映
+            document.getElementById('post-title').innerText = titleMatch ? titleMatch[1] : postName;
+            
+            // 投稿者名の反映
+            if (authorMatch) {
+                document.getElementById('post-author').innerText = "投稿者: " + authorMatch[1];
+            } else {
+                document.getElementById('post-author').innerText = ""; // なければ空に
             }
+
+            // 日付の反映
+            if (dateMatch) {
+                document.getElementById('post-date').innerText = "投稿日: " + dateMatch[1].substring(0, 10);
+            }
+
+            // 本文の反映（2番目の --- 以降すべてを本文とする）
+            // split('---')で分けた場合、index 2 以降が本文
+            const content = parts.slice(2).join('---').trim();
+            document.getElementById('post-content').innerHTML = marked.parse(content);
+        } else {
+            // もし --- がない普通のMarkdownファイルだった場合
+            document.getElementById('post-title').innerText = postName;
+            document.getElementById('post-content').innerHTML = marked.parse(text);
         }
+    } catch (e) {
+        console.error(e);
+        document.getElementById('post-title').innerText = "読み込みエラー";
+        document.getElementById('post-content').innerText = "記事の内容を表示できませんでした。";
+    }
+}
+        
 
         // メニュー開閉設定
         const menuBtn = document.getElementById('menu-btn');
