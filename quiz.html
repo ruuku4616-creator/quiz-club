@@ -132,9 +132,8 @@ async function loadSiteData() {
     menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
 
     window.addEventListener('DOMContentLoaded', () => {
-        loadSiteData(); // ★これを追加
-        loadMemberList();
-        setupMenu();
+        loadSiteData();     // ロゴ読み込み
+        loadQuizArchive();  // クイズ一覧読み込み
     });
 </script>
 </body>
