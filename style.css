@@ -234,11 +234,18 @@ th { color: var(--accent-green); }
     border-color: var(--accent-green);
 }
 
+/* 画像がない場合のカードの高さ調整 */
 .post-card-thumb {
     width: 100%;
     height: 160px;
     object-fit: cover;
-    background: #252525; /* 画像がない時の背景 */
+    background: #252525;
+    display: none; /* 初期状態では非表示にしておく */
+}
+
+/* 画像があるときだけこのクラスをJSで追加して表示する */
+.has-image .post-card-thumb {
+    display: block;
 }
 
 .post-card-content {
@@ -274,6 +281,7 @@ th { color: var(--accent-green); }
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
 
 
 
