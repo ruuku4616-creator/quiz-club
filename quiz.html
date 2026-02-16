@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>クイズ閲覧 - クイズ研究会</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="menu-btn" id="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <nav class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="active.html">活動報告</a></li>
+            <li><a href="quiz.html">SIQ今日の一問</a></li>
+            <li><a href="event.html">大会特設</a></li>
+            <li><a href="blog-list.html">部員ブログ</a></li>
+        </ul>
+    </nav>
+    
     <nav>
         <a href="index.html" class="logo-area">
             <span id="site-logo-text">Shibaura Institute of Quiz</span>
@@ -14,59 +34,79 @@
     </nav>
 
     <div class="container" style="margin-top: 80px;">
-        <h1 style="color: var(--accent-green);">クイズアーカイブ</h1>
-        <p>過去に出題された問題に挑戦してみよう！</p>
-
-        <div id="quiz-container">
-            <p>読み込み中...</p>
-        </div>
-
-        <a href="index.html" style="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
+    <h1 style="color: var(--accent-green);">SIQ 今日の一問アーカイブ</h1>
+    <p>過去に出題された問題に挑戦してみよう！</p>
+    
+    <div id="quiz-grid" class="post-grid">
+        <p>問題を読み込み中...</p>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-        async function loadAllQuizzes() {
-            const container = document.getElementById('quiz-container');
-            try {
-                const response = await fetch('data/quiz-list.json');
-                const quizFiles = await response.json();
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    async function loadQuizArchive() {
+        const grid = document.getElementById('quiz-grid');
+        try {
+            const response = await fetch('data/quiz-list.json');
+            const quizFiles = await response.json();
+            
+            grid.innerHTML = '';
+
+            for (const name of quizFiles) {
+                const res = await fetch(`data/quiz/${name}.md`);
+                const text = await res.text();
+                const parts = text.split('---');
                 
-                container.innerHTML = ''; // 読み込み中を消す
-
-                for (const fileName of quizFiles) {
-                    const res = await fetch(`data/quiz/${fileName}.md`);
-                    const text = await res.text();
-                    
-                    const parts = text.split('---');
-                    if (parts.length >= 3) {
-                        // 2番目の---の後が問題、3番目の---の後が答え
-                        const question = marked.parse(parts[2].trim());
-                        const answer = marked.parse(parts[3] ? parts[3].trim() : "回答が設定されていません");
-                        
-                        const section = document.createElement('div');
-                        section.className = 'section';
-                        section.innerHTML = `
-                            <div class="quiz-box" onclick="toggleAnswer(this)">
-                                <div>${question}</div>
-                                <div class="answer">${answer}</div>
-                            </div>
-                        `;
-                        container.appendChild(section);
-                    }
+                // メタデータからタイトルを取得
+                let title = name;
+                if (parts.length >= 3) {
+                    const meta = parts[1];
+                    const titleMatch = meta.match(/title:\s*["']?(.*?)["']?(\n|$)/);
+                    if (titleMatch) title = titleMatch[1];
                 }
-            } catch (e) {
-                console.error(e);
-                container.innerHTML = '<p>クイズを読み込めませんでした。管理画面からクイズを投稿してください。</p>';
+
+                // クイズカードの作成
+                const card = document.createElement('div');
+                card.className = 'post-card quiz-card'; // quiz-cardクラスを追加
+                card.style.cursor = 'pointer';
+
+                card.innerHTML = `
+                    <div class="post-card-content">
+                        <span style="font-size: 0.8rem; color: var(--accent-green);">Quiz</span>
+                        <h3 class="post-card-title">${title}</h3>
+                        <div class="quiz-answer-preview" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed #444;">
+                            ${marked.parse(parts.length >= 3 ? parts[2] : text)}
+                        </div>
+                        <div class="post-card-meta">クリックで問題を見る</div>
+                    </div>
+                `;
+
+                // クリックしたら中身（問題と答え）を表示するイベント
+                card.addEventListener('click', () => {
+                    const preview = card.querySelector('.quiz-answer-preview');
+                    const meta = card.querySelector('.post-card-meta');
+                    if (preview.style.display === 'none') {
+                        preview.style.display = 'block';
+                        meta.innerText = '閉じる';
+                    } else {
+                        preview.style.display = 'none';
+                        meta.innerText = 'クリックで問題を見る';
+                    }
+                });
+
+                grid.appendChild(card);
             }
+        } catch (e) {
+            grid.innerHTML = '<p>問題が見つかりませんでした。</p>';
         }
+    }
 
-        function toggleAnswer(element) {
-            const answer = element.querySelector('.answer');
-            answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
-        }
+    // メニュー設定
+    const menuBtn = document.getElementById('menu-btn');
+    const navMenu = document.getElementById('nav-menu');
+    menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
 
-        window.addEventListener('DOMContentLoaded', loadAllQuizzes);
-    </script>
+    window.addEventListener('DOMContentLoaded', loadQuizArchive);
+</script>
 </body>
 </html>
