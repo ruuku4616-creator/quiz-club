@@ -128,8 +128,21 @@ async function loadSiteData() {
 
     // メニュー設定
     const menuBtn = document.getElementById('menu-btn');
-    const navMenu = document.getElementById('nav-menu');
-    menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+        const navMenu = document.getElementById('nav-menu');
+        
+        // メニューボタンをクリックした時の処理
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // ★重要：クリックがdocumentまで伝わるのを防ぐ
+            navMenu.classList.toggle('active');
+        });
+        
+        // メニュー以外の場所をクリックした時に閉じる処理
+        document.addEventListener('click', (e) => {
+            // 「クリックされた場所がメニュー内ではない」かつ「ボタンでもない」なら閉じる
+            if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
 
     window.addEventListener('DOMContentLoaded', () => {
         loadSiteData();     // ロゴ読み込み
