@@ -7,8 +7,26 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div class="menu-btn" id="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <nav class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="quiz.html">SIQ今日の一問</a></li>
+            <li><a href="event.html">大会特設</a></li>
+            <li><a href="#">文化祭（準備中）</a></li>
+            <li><a href="#">部員ブログ（準備中）</a></li>
+        </ul>
+    </nav>
+    
     <nav>
         <a href="index.html" class="logo-area">
+            <div id="logo-q-placeholder" class="logo-placeholder">Q</div>
             <span id="site-logo-text">Shibaura Institute of Quiz</span>
         </a>
     </nav>
@@ -18,7 +36,7 @@
         
         <div class="section">
             <h2>第1回 SIQオープン (仮)</h2>
-            <p>芝浦工業大学クイズ研究会が主催する、記念すべき第1回オープン大会です。</p>
+            <p>芝浦工業大学クイズ研究会が主催する大会の情報をここに掲載します。</p>
             
             <table style="margin-top: 20px;">
                 <tr>
@@ -27,42 +45,27 @@
                 </tr>
                 <tr>
                     <th>会場</th>
-                    <td>芝浦工業大学 ◯◯キャンパス / オンライン</td>
-                </tr>
-                <tr>
-                    <th>定員</th>
-                    <td>◯◯名（先着順）</td>
-                </tr>
-                <tr>
-                    <th>参加費</th>
-                    <td>◯◯◯円</td>
+                    <td>芝浦工業大学 ◯◯キャンパス</td>
                 </tr>
             </table>
-        </div>
-
-        <div class="section">
-            <h2>当日のスケジュール</h2>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li><strong>10:00 〜</strong> 開場・受付開始</li>
-                <li><strong>11:00 〜</strong> 予選ペーパークイズ</li>
-                <li><strong>13:00 〜</strong> 本戦トーナメント</li>
-                <li><strong>17:00 〜</strong> 決勝戦・表彰式</li>
-            </ul>
-        </div>
-
-        <div class="section" style="border: 2px solid var(--accent-green);">
-            <h2>エントリーはこちら</h2>
-            <p>以下のボタンより、エントリーフォームへお進みください。</p>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="#" class="x-link" style="padding: 15px 40px; font-size: 1.1rem;">エントリーフォーム（準備中）</a>
-            </div>
         </div>
 
         <a href="index.html" style="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Shibaura Institute of Quiz</p>
-    </footer>
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
