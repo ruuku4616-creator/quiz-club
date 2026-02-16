@@ -11,9 +11,16 @@
 body {
     background-color: var(--main-bg);
     color: var(--text-white);
-    font-family: sans-serif;
+    /* ↓ ここを Noto Sans JP に指定 */
+    font-family: 'Noto Sans JP', sans-serif;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.8; /* 1.6より1.8くらいが読みやすいです */
+    letter-spacing: 0.03em;
+}
+
+/* ついでに記事本文の行間も広げておくと綺麗です */
+#post-content {
+    line-height: 2;
 }
 
 /* --- ヘッダー（太さを復活） --- */
@@ -252,6 +259,7 @@ th { color: var(--accent-green); }
     font-size: 0.8rem;
     color: #888;
 }
+
 
 
 
