@@ -283,34 +283,44 @@ th { color: var(--accent-green); }
 }
 
 /* --- スマホ向けの調整 --- */
-@media (max-width: 600px) {
-    /* ヘッダーの文字を1行に収める */
+/* --- スマホ・タブレット向け調整 (画面幅768px以下) --- */
+@media (max-width: 768px) {
+    /* 1. ヘッダー文字のサイズと改行防止 */
     #site-logo-text {
-        font-size: 0.9rem; /* 少し小さく */
-        white-space: nowrap; /* 絶対に改行させない */
+        font-size: 0.85rem; /* 1行に収まるように小さく */
+        white-space: nowrap; /* 強制的に1行にする */
+        letter-spacing: -0.02em; /* 文字間隔をわずかに詰める */
     }
 
-    /* ロゴ画像のサイズも微調整 */
+    /* 2. ロゴ画像のサイズ調整 */
     #site-logo-img {
-        height: 35px !important; 
+        height: 35px !important;
+        margin-right: 5px !important;
     }
 
-    /* 見出し(H1)のサイズ調整 */
-    h1 {
-        font-size: 1.5rem !important;
-    }
-
-    /* メニューの幅を制限し、アニメーションをつける */
+    /* 3. メニューの幅を制限して右から出す */
     .nav-menu {
-        width: 60%; /* 画面の60%に制限 */
-        right: -60%; /* 最初は隠しておく */
-        transition: right 0.3s ease-in-out; /* ふわっと出す */
+        width: 65%; /* 画面の約2/3に抑える */
+        right: -65%; /* 最初は画面の外へ */
+        left: auto;  /* 左固定を解除 */
+        transition: right 0.3s ease-in-out; /* ふわっと動かす */
     }
 
     .nav-menu.active {
-        right: 0;
+        right: 0; /* アクティブ時に画面内へ */
     }
+
+    /* 4. コンテナの余白をスマホ最適化 */
+    .container {
+        padding: 15px;
+        margin-top: 70px; /* ヘッダーとの距離を微調整 */
+    }
+
+    /* 5. 見出しのサイズを適切に */
+    h1 { font-size: 1.5rem !important; }
+    h2 { font-size: 1.25rem; }
 }
+
 
 
 
