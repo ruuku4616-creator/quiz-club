@@ -18,7 +18,7 @@ collections:
           - {label: "活動紹介文", name: "intro_text", widget: "text"}
           - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
 
-  - name: "blog"
+  - name: "active"
     label: "活動報告"
     folder: "data/blog"
     create: true
@@ -53,3 +53,12 @@ collections:
           - {label: "エントリーURL", name: "entry_url", widget: "string", required: false}
           - {label: "大会ルール・詳細", name: "event_details", widget: "markdown"}
 # --- ここまで追加 ---
+- name: "blog"
+        label: "部員ブログ"
+        folder: "data/blog"
+        create: true
+        slug: "{{title}}" # 記事のタイトルをそのままファイル名にする
+        fields:
+            - {label: "タイトル", name: "title", widget: "string"}
+            - {label: "投稿日", name: "date", widget: "datetime"}
+            - {label: "本文", name: "body", widget: "markdown"}
