@@ -28,7 +28,10 @@
     <div class="container" style="margin-top: 80px;">
         <article class="section">
             <h1 id="post-title" style="color: var(--accent-green);">読み込み中...</h1>
-            <p id="post-date" style="font-size: 0.9rem; color: #888;"></p>
+            <div style="margin-bottom: 20px; font-size: 0.9rem; color: #bbb;">
+                <span id="post-author" style="margin-right: 15px;"></span>
+                <span id="post-date"></span>
+            </div>
             <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
             <div id="post-content">記事を読み込んでいます...</div>
         </article>
@@ -43,56 +46,55 @@
         async function loadBlogPost() {
             const params = new URLSearchParams(window.location.search);
             const postName = params.get('post');
-            // folderが指定されていない場合は 'blog' (活動報告) を見に行く
             const folderName = params.get('folder') || 'blog';
 
-            if (!postName) {
-                document.getElementById('post-title').innerText = "記事が指定されていません";
-                return;
-            }
+            if (!postName) return;
 
             try {
-                // 指定されたフォルダからファイルを取得
                 const response = await fetch(`data/${folderName}/${postName}.md`);
                 if (!response.ok) throw new Error("File not found");
                 
                 const text = await response.text();
-                
-                // --- 1. メタデータ (--- で囲まれた部分) の処理 ---
                 const parts = text.split('---');
-                let content = "";
                 
                 if (parts.length >= 3) {
-                    // タイトルをメタデータから抽出
-                    const titleMatch = parts[1].match(/title:\s*(.*)/);
-                    const dateMatch = parts[1].match(/date:\s*(.*)/);
-                    
+                    // --- メタデータから各項目を抽出 ---
+                    const meta = parts[1];
+                    const titleMatch = meta.match(/title:\s*(.*)/);
+                    const dateMatch = meta.match(/date:\s*(.*)/);
+                    const authorMatch = meta.match(/author:\s*(.*)/); // ★投稿者名を抽出
+
+                    // タイトルの反映
                     document.getElementById('post-title').innerText = titleMatch ? titleMatch[1].replace(/"/g, '') : postName;
+                    
+                    // 投稿者名の反映
+                    if (authorMatch) {
+                        document.getElementById('post-author').innerText = "投稿者: " + authorMatch[1].replace(/"/g, '');
+                    }
+
+                    // 日付の反映
                     if (dateMatch) {
                         document.getElementById('post-date').innerText = "投稿日: " + dateMatch[1].substring(0, 10);
                     }
-                    content = parts.slice(2).join('---').trim();
+
+                    // 本文の反映
+                    const content = parts.slice(2).join('---').trim();
+                    document.getElementById('post-content').innerHTML = marked.parse(content);
                 } else {
                     document.getElementById('post-title').innerText = postName;
-                    content = text;
+                    document.getElementById('post-content').innerHTML = marked.parse(text);
                 }
-
-                // --- 2. MarkdownをHTMLに変換 ---
-                document.getElementById('post-content').innerHTML = marked.parse(content);
-
             } catch (e) {
-                console.error(e);
                 document.getElementById('post-title').innerText = "エラー";
-                document.getElementById('post-content').innerText = "記事の読み込みに失敗しました。ファイルが存在するか確認してください。";
+                document.getElementById('post-content').innerText = "記事が見つかりませんでした。";
             }
         }
 
-        // メニュー開閉用コード
+        // メニュー開閉設定
         const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
         menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
 
-        // ページ読み込み時に実行
         window.addEventListener('DOMContentLoaded', loadBlogPost);
     </script>
 </body>
