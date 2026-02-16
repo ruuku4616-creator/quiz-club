@@ -17,11 +17,19 @@
             <li><a href="index.html">ホーム</a></li>
             <li><a href="active.html">活動報告</a></li>
             <li><a href="quiz.html">SIQ今日の一問</a></li>
-            <li><a href="event.html">芝柏杯　特設ページ</a></li>
+            <li><a href="event.html">芝柏杯 特設ページ</a></li>
             <li><a href="#">文化祭（準備中）</a></li>
             <li><a href="blog-list.html">部員ブログ</a></li>
         </ul>
     </nav>
+
+    <nav>
+        <a href="index.html" class="logo-area">
+            <div id="logo-q-placeholder" class="logo-placeholder">Q</div>
+            <span id="site-logo-text">Shibaura Institute of Quiz</span>
+        </a>
+    </nav>
+
     <div class="container" style="margin-top: 80px;">
         <h1 style="color: var(--accent-green);">部員ブログ</h1>
         <div class="section">
@@ -30,10 +38,10 @@
     </div>
 
     <script>
+    // 1. 部員ブログ一覧の読み込み
     async function loadMemberList() {
         const list = document.getElementById('member-blog-list');
         try {
-            // member-list.json (部員ブログ用) を取得
             const response = await fetch('data/member-list.json');
             if (!response.ok) throw new Error();
             const posts = await response.json();
@@ -42,7 +50,6 @@
             posts.forEach(name => {
                 const li = document.createElement('li');
                 li.style.marginBottom = "15px";
-                // リンクに folder=members_blog を含めることで blog.html が場所を特定できるようにする
                 li.innerHTML = `<a href="blog.html?folder=members_blog&post=${encodeURIComponent(name)}" style="color:var(--accent-green); text-decoration:none; font-size:1.2rem;">● ${name}</a>`;
                 list.appendChild(li);
             });
@@ -50,7 +57,31 @@
             list.innerHTML = '<li>記事がまだありません。</li>';
         }
     }
-    window.addEventListener('DOMContentLoaded', loadMemberList);
-</script>
+
+    // 2. メニュー開閉の設定（★ここを追加しました）
+    function setupMenu() {
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        
+        if (menuBtn && navMenu) {
+            menuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+            // メニューの外側をクリックしたら閉じる設定
+            document.addEventListener('click', (e) => {
+                if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    // ページ読み込み時に両方を実行
+    window.addEventListener('DOMContentLoaded', () => {
+        loadMemberList();
+        setupMenu();
+    });
+    </script>
 </body>
 </html>
