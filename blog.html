@@ -52,6 +52,7 @@
                 const response = await fetch(`data/blog/${postName}.md`);
                 if (!response.ok) throw new Error();
                 const text = await response.text();
+            // blog.html 内の fetch 部分を以下のように確認・修正してください
 
                 // メタデータ (--- で囲まれた部分) を分離
                 const parts = text.split('---');
