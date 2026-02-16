@@ -56,19 +56,24 @@
                     } catch (e) { console.log("画像データ取得失敗:", name); }
 
                     // カードのHTML作成
+                    // ...（画像取得の処理はそのまま）
                     const card = document.createElement('a');
                     card.href = `blog.html?folder=blog&post=${encodeURIComponent(name)}`;
                     card.className = 'post-card';
                     
-                    // 画像があれば表示、なければプレースホルダーを表示
-                    const displayThumb = thumbUrl ? thumbUrl : 'https://via.placeholder.com/300x160?text=No+Image';
-
+                    // 画像が存在する場合のみ img タグを生成し、親に 'has-image' クラスをつける
+                    let imageHtml = '';
+                    if (thumbUrl) {
+                        card.classList.add('has-image');
+                        imageHtml = `<img src="${thumbUrl}" class="post-card-thumb" alt="${name}">`;
+                    }
+                    
                     card.innerHTML = `
-                        <img src="${displayThumb}" class="post-card-thumb" alt="${name}">
-                        <div class="post-card-content">
-                            <h3 class="post-card-title">${name}</h3>
-                            <div class="post-card-meta">記事を読む →</div>
-                        </div>
+                    ${imageHtml}
+                    <div class="post-card-content">
+                    <h3 class="post-card-title">${name}</h3>
+                    <div class="post-card-meta">記事を読む →</div>
+                    </div>
                     `;
                     list.appendChild(card);
                 }
@@ -87,5 +92,6 @@
     </script>
 </body>
 </html>
+
 
 
