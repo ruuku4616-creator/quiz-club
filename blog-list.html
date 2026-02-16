@@ -42,6 +42,28 @@
     </div>
 
     <script>
+        // サイト基本データ（ロゴと名称）を読み込む共通関数
+        async function loadSiteData() {
+            try {
+                const response = await fetch('data/index.json');
+                const data = await response.json();
+                // サイト名の反映
+                const siteTitle = data.site_title || "Shibaura Institute of Quiz";
+        document.getElementById('site-logo-text').innerText = siteTitle;
+        
+        // ロゴ画像の反映
+        const logoImg = document.getElementById('site-logo-img');
+        const logoPlaceholder = document.getElementById('logo-q-placeholder');
+        
+        if (data.logo_image) {
+            logoImg.src = data.logo_image;
+            logoImg.style.display = 'inline-block';
+            if (logoPlaceholder) logoPlaceholder.style.display = 'none';
+        }
+    } catch (e) {
+        console.error("ロゴの読み込みに失敗しました:", e);
+    }
+}
     async function loadMemberList() {
         const list = document.getElementById('member-blog-list');
         try {
