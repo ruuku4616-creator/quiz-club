@@ -18,7 +18,6 @@
             <li><a href="active.html">活動報告</a></li>
             <li><a href="quiz.html">SIQ今日の一問</a></li>
             <li><a href="event.html">芝柏杯 特設ページ</a></li>
-            <li><a href="#">文化祭（準備中）</a></li>
             <li><a href="blog-list.html">部員ブログ</a></li>
         </ul>
     </nav>
@@ -48,13 +47,23 @@
             const posts = await response.json();
             
             list.innerHTML = '';
+            // 例：blog-list.html の場
             posts.forEach(name => {
-                const li = document.createElement('li');
-                li.style.marginBottom = "15px";
-                // ★ここを修正：正しいリンクと表示テキストを設定
-                li.innerHTML = `<a href="blog.html?folder=members_blog&post=${encodeURIComponent(name)}" style="color:var(--accent-green); text-decoration:none; font-size:1.2rem;">● ${name}</a>`;
-                list.appendChild(li);
+                const card = document.createElement('a');
+                card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`; // folder名は各ファイルに合わせる
+                card.className = 'post-card';
+                
+                card.innerHTML = `
+                <div class="post-card-content">
+                <h3 class="post-card-title">${name}</h3>
+                <div class="post-card-meta">記事を読む →</div>
+                </div>
+                `;
+                list.appendChild(card);
             });
+
+// リストの親要素（ULなど）のIDを囲む部分に class="post-grid" を追加するのも忘れずに！
+// 例： <div id="member-blog-list" class="post-grid"></div>
         } catch (e) {
             console.error(e);
             list.innerHTML = '<li>記事がまだありません。</li>';
