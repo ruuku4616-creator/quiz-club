@@ -129,9 +129,10 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-        loadMemberList();
-        setupMenu();
-    });
+    loadSiteData(); // ★これを追加
+    loadMemberList();
+    setupMenu();
+});
     </script>
 </body>
 </html>
