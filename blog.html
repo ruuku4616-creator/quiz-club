@@ -151,8 +151,9 @@ async function loadSiteData() {
 }
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadSiteData(); // ロゴ読み込み
-            loadBlogPost(); // 記事本文読み込み
+            loadSiteData();   // ロゴ読み込み
+            loadBlogPost();   // ★記事詳細ページではこれが必要！
+            setupMenu();      // メニュー機能を起動
         });
     </script>
 </body>
