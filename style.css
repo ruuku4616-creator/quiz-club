@@ -282,6 +282,35 @@ th { color: var(--accent-green); }
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* --- スマホ向けの調整 --- */
+@media (max-width: 600px) {
+    /* ヘッダーの文字を1行に収める */
+    #site-logo-text {
+        font-size: 0.9rem; /* 少し小さく */
+        white-space: nowrap; /* 絶対に改行させない */
+    }
+
+    /* ロゴ画像のサイズも微調整 */
+    #site-logo-img {
+        height: 35px !important; 
+    }
+
+    /* 見出し(H1)のサイズ調整 */
+    h1 {
+        font-size: 1.5rem !important;
+    }
+
+    /* メニューの幅を制限し、アニメーションをつける */
+    .nav-menu {
+        width: 60%; /* 画面の60%に制限 */
+        right: -60%; /* 最初は隠しておく */
+        transition: right 0.3s ease-in-out; /* ふわっと出す */
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+}
 
 
 
