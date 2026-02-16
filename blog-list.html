@@ -32,7 +32,7 @@
     <div class="container" style="margin-top: 80px;">
         <h1 style="color: var(--accent-green);">部員ブログ</h1>
         <div class="section">
-            <ul id="member-blog-list"><li>読み込み中...</li></ul>
+            <div id="member-blog-list" class="post-grid">読み込み中...</div>
         </div>
     </div>
 
@@ -40,50 +40,54 @@
     async function loadMemberList() {
         const list = document.getElementById('member-blog-list');
         try {
+            // 部員ブログのリストを取得
             const response = await fetch('data/member-list.json');
+            if (!response.ok) throw new Error();
             const posts = await response.json();
             
             list.innerHTML = '';
-            // 記事ごとに詳細データを読み込んで画像を取得する
+
             for (const name of posts) {
-                let thumbUrl = "images/default-thumb.jpg"; // 画像がない時の予備
+                let thumbUrl = "";
+
                 try {
-                // 各記事のファイル（.md）を一時的に読み取って画像URLを探す
+                    // 各部員ブログの.mdファイルを読み込み（フォルダ名に注意）
                     const postRes = await fetch(`data/members_blog/${name}.md`);
                     const postText = await postRes.text();
-                    // メタデータから thumbnail: "..." の部分を抜き出す
+                    
                     const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
                     if (thumbMatch && thumbMatch[1]) {
                         thumbUrl = thumbMatch[1];
                     }
-                } catch (e) { console.log("画像なし:", name); }
+                } catch (e) { console.log("画像取得失敗:", name); }
+
                 const card = document.createElement('a');
                 card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`;
                 card.className = 'post-card';
+                
+                const displayThumb = thumbUrl ? thumbUrl : 'https://via.placeholder.com/300x160?text=No+Image';
+
                 card.innerHTML = `
-                <img src="${thumbUrl}" class="post-card-thumb" alt="${name}" onerror="this.src='https://via.placeholder.com/300x160?text=No+Image'">
-                <div class="post-card-content">
-                <h3 class="post-card-title">${name}</h3>
-                <div class="post-card-meta">記事を詳しく読む →</div>
-                </div>
+                    <img src="${displayThumb}" class="post-card-thumb" alt="${name}">
+                    <div class="post-card-content">
+                        <h3 class="post-card-title">${name}</h3>
+                        <div class="post-card-meta">記事を詳しく読む →</div>
+                    </div>
                 `;
                 list.appendChild(card);
             }
         } catch (e) {
+            console.error(e);
             list.innerHTML = '<p>記事がまだありません。</p>';
         }
     }
-    // 2. メニュー開閉の設定（★ここを追加しました）
+
     function setupMenu() {
         const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
         
         if (menuBtn && navMenu) {
-            menuBtn.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
-
-            // メニューの外側をクリックしたら閉じる設定
+            menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
             document.addEventListener('click', (e) => {
                 if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
                     navMenu.classList.remove('active');
@@ -92,7 +96,6 @@
         }
     }
 
-    // ページ読み込み時に両方を実行
     window.addEventListener('DOMContentLoaded', () => {
         loadMemberList();
         setupMenu();
