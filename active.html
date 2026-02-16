@@ -30,11 +30,23 @@
                 const posts = await response.json();
                 const list = document.getElementById('full-list');
                 list.innerHTML = '';
+                // 例：blog-list.html の場合
                 posts.forEach(name => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="blog.html?post=${name}" style="color:var(--accent-green);">${name}</a>`;
-                    list.appendChild(li);
+                    const card = document.createElement('a');
+                    card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`; // folder名は各ファイルに合わせる
+                    card.className = 'post-card';
+                    
+                    card.innerHTML = `
+                    <div class="post-card-content">
+                    <h3 class="post-card-title">${name}</h3>
+                    <div class="post-card-meta">記事を読む →</div>
+                </div>
+                `;
+                    list.appendChild(card);
                 });
+
+// リストの親要素（ULなど）のIDを囲む部分に class="post-grid" を追加するのも忘れずに！
+// 例： <div id="member-blog-list" class="post-grid"></div>
             } catch (e) { document.getElementById('full-list').innerText = "記事がありません。"; }
         }
         const menuBtn = document.getElementById('menu-btn');
@@ -44,4 +56,5 @@
     </script>
 </body>
 </html>
+
 
