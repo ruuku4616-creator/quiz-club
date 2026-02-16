@@ -25,6 +25,7 @@ collections:
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
+      - {label: "投稿者名", name: "author", widget: "string", required: false} # ★追加（任意入力にしています）
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
@@ -65,3 +66,4 @@ collections:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "投稿日", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
+
