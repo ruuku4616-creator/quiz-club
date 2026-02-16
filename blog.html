@@ -38,38 +38,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        async function loadBlogPost() {
-            // URLから記事名を取得 (?post=記事名)
-            const params = new URLSearchParams(window.location.search);
-            const postName = params.get('post');
+        // blog.html の読み込み部分
+async function loadBlogPost() {
+    const params = new URLSearchParams(window.location.search);
+    const postName = params.get('post');
+    if (!postName) return;
 
-            if (!postName) {
-                document.getElementById('post-title').innerText = "記事が見つかりません";
-                return;
-            }
-
-            try {
-                const response = await fetch(`data/blog/${postName}.md`);
-                if (!response.ok) throw new Error();
-                const text = await response.text();
-            // blog.html 内の fetch 部分を以下のように確認・修正してください
-
-                // メタデータ (--- で囲まれた部分) を分離
-                const parts = text.split('---');
-                if (parts.length >= 3) {
-                    // タイトルを抽出 (title: 記事名 の形式を想定)
-                    const titleMatch = parts[1].match(/title:\s*(.*)/);
-                    const title = titleMatch ? titleMatch[1] : postName;
-                    
-                    document.getElementById('post-title').innerText = title;
-                    document.getElementById('post-content').innerHTML = marked.parse(parts[2].trim());
-                } else {
-                    document.getElementById('post-content').innerHTML = marked.parse(text);
-                }
-            } catch (e) {
-                document.getElementById('post-title').innerText = "エラー";
-                document.getElementById('post-content').innerText = "記事の読み込みに失敗しました。";
-            }
+    try {
+        // data/blog/ フォルダの中を見に行くように固定します
+        const response = await fetch(`data/blog/${postName}.md`);
+        if (!response.ok) throw new Error("File not found");
+        
+        const text = await response.text();
+        const parts = text.split('---');
+        
+        if (parts.length >= 3) {
+            const titleMatch = parts[1].match(/title:\s*(.*)/);
+            document.getElementById('post-title').innerText = titleMatch ? titleMatch[1] : postName;
+            document.getElementById('post-content').innerHTML = marked.parse(parts[2].trim());
+        } else {
+            document.getElementById('post-content').innerHTML = marked.parse(text);
+        }
+    } catch (e) {
+        console.error(e);
+        document.getElementById('post-title').innerText = "エラー";
+        document.getElementById('post-content').innerText = "記事が見つかりません。GitHubの data/blog/ フォルダにファイルがあるか確認してください。";
+    }
+}
         }
 
         // メニュー開閉用コード
