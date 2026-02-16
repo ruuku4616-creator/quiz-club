@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部員ブログ - クイズ研究会</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="menu-btn" id="menu-btn"><span></span><span></span><span></span></div>
+    <nav class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="quiz.html">SIQ今日の一問</a></li>
+            <li><a href="event.html">大会特設</a></li>
+            <li><a href="#">文化祭（準備中）</a></li>
+            <li><a href="blog.html">部員ブログ</a></li>
+        </ul>
+    </nav>
+
+    <nav>
+        <a href="index.html" class="logo-area">
+            <div id="logo-q-placeholder" class="logo-placeholder">Q</div>
+            <span id="site-logo-text">Shibaura Institute of Quiz</span>
+        </a>
+    </nav>
+
+    <div class="container" style="margin-top: 80px;">
+        <article class="section">
+            <h1 id="post-title" style="color: var(--accent-green);">記事を読み込み中...</h1>
+            <p id="post-date" style="font-size: 0.9rem; color: #888;"></p>
+            <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+            <div id="post-content">
+                </div>
+        </article>
+        <a href="index.html" style="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        async function loadBlogPost() {
+            // URLから記事名を取得 (?post=記事名)
+            const params = new URLSearchParams(window.location.search);
+            const postName = params.get('post');
+
+            if (!postName) {
+                document.getElementById('post-title').innerText = "記事が見つかりません";
+                return;
+            }
+
+            try {
+                const response = await fetch(`data/blog/${postName}.md`);
+                if (!response.ok) throw new Error();
+                const text = await response.text();
+
+                // メタデータ (--- で囲まれた部分) を分離
+                const parts = text.split('---');
+                if (parts.length >= 3) {
+                    // タイトルを抽出 (title: 記事名 の形式を想定)
+                    const titleMatch = parts[1].match(/title:\s*(.*)/);
+                    const title = titleMatch ? titleMatch[1] : postName;
+                    
+                    document.getElementById('post-title').innerText = title;
+                    document.getElementById('post-content').innerHTML = marked.parse(parts[2].trim());
+                } else {
+                    document.getElementById('post-content').innerHTML = marked.parse(text);
+                }
+            } catch (e) {
+                document.getElementById('post-title').innerText = "エラー";
+                document.getElementById('post-content').innerText = "記事の読み込みに失敗しました。";
+            }
+        }
+
+        // メニュー開閉用コード
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+
+        window.addEventListener('DOMContentLoaded', loadBlogPost);
+    </script>
+</body>
+</html>
