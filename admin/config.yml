@@ -2,9 +2,10 @@ backend:
   name: git-gateway
   repo: ruuku4616-creator/quiz_club
   branch: main
-  
+
 media_folder: "images"
 public_folder: "/images"
+
 collections:
   - name: "pages"
     label: "ページ編集"
@@ -28,6 +29,7 @@ collections:
       - {label: "日付", name: "date", widget: "datetime"}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
       - {label: "本文", name: "body", widget: "markdown"}
+
   - name: "quiz"
     label: "SIQ今日の一問"
     folder: "data/quiz"
@@ -35,14 +37,14 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "タイトル（管理用）", name: "title", widget: "string"}
-      - {label: "問題文と回答", name: "body", widget: "text"} # markdownからtextに変更
-# --- ここから追加 ---
+      - {label: "問題文と回答", name: "body", widget: "text"}
+
   - name: "event"
     label: "芝柏杯 特設ページ管理"
     files:
       - label: "大会基本情報"
         name: "info"
-        file: "data/event.json" # 大会データはこのファイルに保存されます
+        file: "data/event.json"
         fields:
           - {label: "大会名", name: "event_title", widget: "string"}
           - {label: "キャッチコピー", name: "event_copy", widget: "text"}
@@ -52,13 +54,13 @@ collections:
           - {label: "参加費", name: "event_fee", widget: "string"}
           - {label: "エントリーURL", name: "entry_url", widget: "string", required: false}
           - {label: "大会ルール・詳細", name: "event_details", widget: "markdown"}
+
   - name: "blog"
     label: "部員ブログ"
     folder: "data/blog"
     create: true
-    slug: "{{title}}" # 記事のタイトルをそのままファイル名にする
+    slug: "{{title}}"
     fields:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "投稿日", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
-
