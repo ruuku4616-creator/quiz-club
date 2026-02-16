@@ -32,25 +32,59 @@
     </nav>
 
     <div class="container" style="margin-top: 80px;">
-        <h1 style="color: var(--accent-green); text-align: center;">大会情報・特設ページ</h1>
-        
-        <div class="section">
-            <h2>第1回 SIQオープン (仮)</h2>
-            <p>芝浦工業大学クイズ研究会が主催する大会の情報をここに掲載します。</p>
-            
-            <table style="margin-top: 20px;">
-                <tr>
-                    <th>開催日</th>
-                    <td>2026年 ◯月 ◯日（日）</td>
-                </tr>
-                <tr>
-                    <th>会場</th>
-                    <td>芝浦工業大学 ◯◯キャンパス</td>
-                </tr>
-            </table>
-        </div>
+    <h1 id="ev-title" style="color: var(--accent-green); text-align: center;">読み込み中...</h1>
+    
+    <div class="section">
+        <h2 id="ev-copy">大会概要</h2>
+        <table style="margin-top: 20px;">
+            <tr><th>開催日</th><td id="ev-date">-</td></tr>
+            <tr><th>会場</th><td id="ev-place">-</td></tr>
+            <tr><th>定員</th><td id="ev-capacity">-</td></tr>
+            <tr><th>参加費</th><td id="ev-fee">-</td></tr>
+        </table>
+    </div>
 
-        <a href="index.html" style="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
+    <div class="section">
+        <h2>大会ルール・詳細</h2>
+        <div id="ev-details">読み込み中...</div>
+    </div>
+
+    <div id="entry-area" class="section" style="border: 2px solid var(--accent-green); display: none;">
+        <h2>エントリー</h2>
+        <div style="text-align: center; margin-top: 20px;">
+            <a id="ev-entry-btn" href="#" class="x-link" style="padding: 15px 40px; font-size: 1.1rem; text-decoration: none; display: inline-block; background: var(--accent-green); color: black; border-radius: 5px; font-weight: bold;">エントリーフォームへ</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    async function loadEventData() {
+        try {
+            const response = await fetch('data/event.json');
+            const data = await response.json();
+            
+            document.getElementById('ev-title').innerText = data.event_title;
+            document.getElementById('ev-copy').innerText = data.event_copy;
+            document.getElementById('ev-date').innerText = data.event_date;
+            document.getElementById('ev-place').innerText = data.event_place;
+            document.getElementById('ev-capacity').innerText = data.event_capacity;
+            document.getElementById('ev-fee').innerText = data.event_fee;
+            
+            // Markdownの変換
+            document.getElementById('ev-details').innerHTML = marked.parse(data.event_details || "");
+            
+            // エントリーURLがある場合のみボタンを表示
+            if (data.entry_url) {
+                document.getElementById('entry-area').style.display = 'block';
+                document.getElementById('ev-entry-btn').href = data.entry_url;
+            }
+        } catch (e) {
+            console.error("Event data error:", e);
+        }
+    }
+    window.addEventListener('DOMContentLoaded', loadEventData);
+</script>e="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
     </div>
 
     <script>
