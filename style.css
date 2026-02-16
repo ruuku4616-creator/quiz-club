@@ -156,6 +156,14 @@ th { color: var(--accent-green); }
     flex-direction: column;
     gap: 5px;
 }
+/* --- ハンバーガーメニューボタンの「線」の設定 --- */
+.menu-btn span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: white; /* これで白い線が見えるようになります */
+    transition: 0.3s;
+}
 
 /* --- メニュー本体 --- */
 .nav-menu {
@@ -177,6 +185,7 @@ th { color: var(--accent-green); }
 .nav-menu.active {
     right: 0 !important;
 }
+
 
 
 
