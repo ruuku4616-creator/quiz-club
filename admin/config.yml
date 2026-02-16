@@ -59,8 +59,9 @@ collections:
     label: "部員ブログ"
     folder: "data/members_blog"
     create: true
-    slug: "{{title}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{author}}-{{title}}" # ファイル名に投稿者名を含める
     fields:
+      - {label: "投稿者名", name: "author", widget: "string"} # ★ここを追加
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "投稿日", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
