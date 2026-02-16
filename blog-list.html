@@ -14,22 +14,27 @@
     </div>
 
     <script>
-        async function loadMemberList() {
-            try {
-                // 部員ブログ専用のリストを読み込む
-                const response = await fetch('data/member-list.json');
-                const posts = await response.json();
-                const list = document.getElementById('member-blog-list');
-                list.innerHTML = '';
-                posts.forEach(name => {
-                    const li = document.createElement('li');
-                    // フォルダ名を指定して詳細ページへ飛ばす
-                    li.innerHTML = `<a href="blog.html?folder=members_blog&post=${name}" style="color:var(--accent-green);">${name}</a>`;
-                    list.appendChild(li);
-                });
-            } catch (e) { document.getElementById('member-blog-list').innerText = "記事がありません。"; }
+    async function loadMemberList() {
+        const list = document.getElementById('member-blog-list');
+        try {
+            // member-list.json (部員ブログ用) を取得
+            const response = await fetch('data/member-list.json');
+            if (!response.ok) throw new Error();
+            const posts = await response.json();
+            
+            list.innerHTML = '';
+            posts.forEach(name => {
+                const li = document.createElement('li');
+                li.style.marginBottom = "15px";
+                // リンクに folder=members_blog を含めることで blog.html が場所を特定できるようにする
+                li.innerHTML = `<a href="blog.html?folder=members_blog&post=${encodeURIComponent(name)}" style="color:var(--accent-green); text-decoration:none; font-size:1.2rem;">● ${name}</a>`;
+                list.appendChild(li);
+            });
+        } catch (e) {
+            list.innerHTML = '<li>記事がまだありません。</li>';
         }
-        window.addEventListener('DOMContentLoaded', loadMemberList);
-    </script>
+    }
+    window.addEventListener('DOMContentLoaded', loadMemberList);
+</script>
 </body>
 </html>
