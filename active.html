@@ -33,7 +33,7 @@
                 // 例：blog-list.html の場合
                 posts.forEach(name => {
                     const card = document.createElement('a');
-                    card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`; // folder名は各ファイルに合わせる
+                    card.href = `blog.html?folder=blog&post=${encodeURIComponent(name)}`; // folder名は各ファイルに合わせる
                     card.className = 'post-card';
                     
                     card.innerHTML = `
@@ -56,5 +56,6 @@
     </script>
 </body>
 </html>
+
 
 
