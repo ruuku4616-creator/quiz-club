@@ -59,13 +59,15 @@ async function loadBlogPost() {
         } else {
             document.getElementById('post-content').innerHTML = marked.parse(text);
         }
+    /* --- 修正前 --- */
     } catch (e) {
-        console.error(e);
-        document.getElementById('post-title').innerText = "エラー";
-        document.getElementById('post-content').innerText = "記事が見つかりません。GitHubの data/blog/ フォルダにファイルがあるか確認してください。";
+        // ...エラー処理...
     }
-}
-        }
+} // ← ここは関数の終わりなので必要
+} // ← ★この余計なカッコを削除してください★
+
+// メニュー開閉用コード
+const menuBtn = document.getElementById('menu-btn');
 
         // メニュー開閉用コード
         const menuBtn = document.getElementById('menu-btn');
