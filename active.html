@@ -3,87 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>活動報告 - クイズ研究会</title>
+    <title>活動報告・ブログ一覧 - クイズ研究会</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        /* メインサイトの雰囲気を壊さないための微調整 */
-        body {
-            background-color: #000; /* メインサイトに合わせて黒背景に設定 */
-            color: #fff;            /* 文字は白 */
-        }
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-        .article-body {
-            background: rgba(255, 255, 255, 0.05); /* ほんのり背景を明るく */
-            padding: 30px;
-            border-radius: 8px;
-            border: 1px solid var(--accent-green); /* メインの緑色を枠線に */
-        }
-        #post-title {
-            color: var(--accent-green); /* タイトルをメインカラーに */
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .post-date {
-            color: #888;
-            margin-bottom: 20px;
-        }
-        .article-content {
-            line-height: 1.8;
-            font-size: 1.15rem;
-            text-align: left;
-        }
-        .back-link {
-            color: var(--accent-green);
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">← 戻る</a>
-
-        <article class="article-body">
-            <h1 id="post-title">読み込み中...</h1>
-            <p class="post-date" id="post-date"></p>
-            <hr style="border-color: #333; margin: 20px 0;">
-            <div id="post-content" class="article-content"></div>
-        </article>
+    <div class="menu-btn" id="menu-btn"><span></span><span></span><span></span></div>
+    <nav class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="active.html">活動報告・ブログ</a></li>
+            <li><a href="quiz.html">SIQ今日の一問</a></li>
+            <li><a href="event.html">大会特設</a></li>
+        </ul>
+    </nav>
+    <div class="container" style="margin-top: 80px;">
+        <h1 style="color: var(--accent-green);">記事一覧</h1>
+        <div class="section">
+            <ul id="full-list"><li>読み込み中...</li></ul>
+        </div>
     </div>
-
     <script>
-        async function loadPost() {
-            const params = new URLSearchParams(window.location.search);
-            const postName = params.get('post');
-            if (!postName) return;
-
+        async function loadList() {
             try {
-                const response = await fetch(`data/blog/${postName}.md`);
-                let text = await response.text();
-                
-                if (text.startsWith('---')) {
-                    const parts = text.split('---');
-                    if (parts.length >= 3) { text = parts.slice(2).join('---').trim(); }
-                }
-                
-                const cleanTitle = postName.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-                const datePart = postName.match(/^\d{4}-\d{2}-\d{2}/);
-
-                document.getElementById('post-title').innerText = cleanTitle;
-                if(datePart) document.getElementById('post-date').innerText = "公開日: " + datePart[0];
-                document.getElementById('post-content').innerHTML = marked.parse(text);
-                
-            } catch (e) {
-                document.getElementById('post-content').innerText = "記事の読み込みに失敗しました。";
-            }
+                const response = await fetch('data/blog-list.json');
+                const posts = await response.json();
+                const list = document.getElementById('full-list');
+                list.innerHTML = '';
+                posts.forEach(name => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="blog.html?post=${name}" style="color:var(--accent-green);">${name}</a>`;
+                    list.appendChild(li);
+                });
+            } catch (e) { document.getElementById('full-list').innerText = "記事がありません。"; }
         }
-        loadPost();
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+        window.addEventListener('DOMContentLoaded', loadList);
     </script>
 </body>
 </html>
