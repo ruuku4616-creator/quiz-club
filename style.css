@@ -320,24 +320,25 @@ th { color: var(--accent-green); }
     h1 { font-size: 1.5rem !important; }
     h2 { font-size: 1.25rem; }
 }
-/* PCでは改行を隠す */
+/* PCでは改行させない */
 .sp-only {
     display: none;
 }
 
-/* スマホ（画面幅768px以下）では改行を有効にする */
 @media (max-width: 768px) {
+    /* スマホの時だけ改行を有効にする */
     .sp-only {
-        display: inline;
+        display: block;
+        content: "";
+        margin-top: 5px;
     }
-    
-    /* 改行を許可するため nowrap を解除する */
-    #site-logo-text {
-        white-space: normal !important;
-        display: inline-block;
-        line-height: 1.2; /* 行間を少し詰める */
+    /* 見出しの微調整 */
+    #main-title {
+        line-height: 1.4;
+        font-size: 1.5rem;
     }
 }
+
 
 
 
