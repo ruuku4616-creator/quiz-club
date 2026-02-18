@@ -3,10 +3,37 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>コンテンツ管理システム</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <title>SIQ Content Manager</title>
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  <style>
+    /* 管理画面自体のスマホ最適化カスタムCSS */
+    /* プレビューが横に並んで入力しにくい問題を解決します */
+    @media (max-width: 768px) {
+      /* プレビューエリアを非表示にして入力エリアを全画面に */
+      .nc-entryEditor-controlPane + div {
+        display: none !important;
+      }
+      /* 入力エリアの幅を100%に */
+      .nc-entryEditor-controlPane {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      /* 保存ボタンなどのツールバーを押しやすく */
+      .nc-app-layout-main {
+        padding-bottom: 60px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // 日本語化設定（スマホだと英語より日本語の方が直感的に操作しやすいため）
+    CMS.registerLocale('ja', {
+      auth: { login: 'ログイン', loggingIn: 'ログイン中...' },
+      app: { header: { content: 'コンテンツ', workflow: 'ワークフロー', media: 'メディア' } },
+      editor: { editor: { card: { draft: '下書き' } } }
+      // 必要に応じて他の日本語設定も追加可能
+    });
+  </script>
 </body>
 </html>
