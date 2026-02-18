@@ -41,10 +41,7 @@
         try {
             const response = await fetch('data/index.json');
             const data = await response.json();
-            
-            // ヘッダーは管理画面で設定した英語名を出す
             document.getElementById('site-logo-text').innerText = data.site_title_en || "Shibaura Institute of Quiz";
-            
             const logoImg = document.getElementById('site-logo-img');
             if (data.logo_image) {
                 logoImg.src = data.logo_image;
@@ -55,92 +52,76 @@
             }
         } catch (e) { console.error(e); }
     }
-        async function loadList() {
-            const list = document.getElementById('full-list');
-            try {
-                // 活動報告のリストを取得
-                const response = await fetch('data/blog-list.json');
-                const posts = await response.json();
-                
-                list.innerHTML = '';
 
-                // ... (前略) ...
-for (const name of posts) {
-    let thumbUrl = "";
-    let postDate = "";
-    let postAuthor = "";
-
-    try {
-        // フォルダ名は active.html なら 'blog'、blog-list.html なら 'members_blog'
-        const folder = (document.getElementById('full-list')) ? 'blog' : 'members_blog';
-        const postRes = await fetch(`data/${folder}/${name}.md`);
-        const postText = await postRes.text();
-        
-        // メタデータを抽出
-        const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
-        const dateMatch = postText.match(/date:\s*["']?(.*?)["']?(\n|$)/);
-        const authorMatch = postText.match(/author:\s*["']?(.*?)["']?(\n|$)/);
-
-        if (thumbMatch) thumbUrl = thumbMatch[1];
-        if (dateMatch) postDate = dateMatch[1].substring(0, 10); // YYYY-MM-DD形式
-        if (authorMatch) postAuthor = authorMatch[1];
-    } catch (e) { console.log("データ取得失敗:", name); }
-
-    const card = document.createElement('a');
-    card.href = `blog.html?folder=${(document.getElementById('full-list')) ? 'blog' : 'members_blog'}&post=${encodeURIComponent(name)}`;
-    card.className = 'post-card';
-    
-    let imageHtml = thumbUrl ? `<img src="${thumbUrl}" class="post-card-thumb" alt="${name}">` : '';
-    if (thumbUrl) card.classList.add('has-image');
-    
-    // カードの中身をリッチにする
-    card.innerHTML = `
-        ${imageHtml}
-        <div class="post-card-content">
-            <h3 class="post-card-title">${name}</h3>
-            <div class="post-card-meta">
-                ${postDate ? `<span>📅 ${postDate}</span>` : ''}
-                ${postAuthor ? `<span>👤 ${postAuthor}</span>` : ''}
-            </div>
-            <div class="post-card-more">記事を読む →</div>
-        </div>
-    `;
-    list.appendChild(card);
-}
-            } catch (e) { 
-                list.innerHTML = "<p>記事がありません。</p>"; 
-                console.error(e);
-            }
-        }
-
-        function setupMenu() {
-            const menuBtn = document.getElementById('menu-btn');
-            const navMenu = document.getElementById('nav-menu');
+    async function loadActiveList() { // 関数名変更
+        const list = document.getElementById('active-blog-list'); // IDも合わせる
+        try {
+            const response = await fetch('data/blog-list.json'); // 参照JSONを変更
+            const posts = await response.json();
             
-            if (menuBtn && navMenu) {
-        // ボタンクリックで開閉
-                menuBtn.onclick = (e) => {
-                    e.stopPropagation(); // 背景クリック連動を防ぐ
-                    navMenu.classList.toggle('active');
-                };
+            list.innerHTML = '';
 
-        // メニュー以外の場所（背景）をタップしたら閉じる
-                document.onclick = (e) => {
-                    if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                        navMenu.classList.remove('active');
-                    }
-                };
+            for (const name of posts) {
+                // ... (略) ...
+                const folder = 'blog'; // 読み込みフォルダを blog に
+                const postRes = await fetch(`data/${folder}/${name}.md`);
+                // ... (略) ...
+
+                const card = document.createElement('a');
+                // リンク先のパラメータを folder=blog に
+                card.href = `blog.html?folder=blog&post=${encodeURIComponent(name)}`;
+                card.className = 'post-card';
+                // ... (以下、組み立ては同じ) ...
             }
+        } catch (e) { ... }
+    }
+                // 3. カードのHTML組み立て
+                const card = document.createElement('a');
+                card.href = `blog.html?folder=blog&post=${encodeURIComponent(name)}`;
+                card.className = 'post-card';
+                if (thumbUrl) card.classList.add('has-image');
+                
+                card.innerHTML = `
+                    <img src="${thumbUrl}" class="post-card-thumb" alt="${name}">
+                    <div class="post-card-content">
+                        <h3 class="post-card-title">${name}</h3>
+                        <div class="post-card-meta">
+                            <span>📅 ${postDate || '日付なし'}</span>
+                            <span>👤 ${postAuthor}</span>
+                        </div>
+                        <div class="post-card-more">記事を読む →</div>
+                    </div>
+                `;
+                list.appendChild(card);
+            }
+        } catch (e) {
+            console.error(e);
+            list.innerHTML = '<p>記事が読み込めないか、まだありません。</p>';
         }
+    }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadSiteData(); // ロゴ読み込み
-            loadList();     // 活動報告一覧読み込み
-            setupMenu();    // ★ここを追加！これでメニューが動くようになります
-        });
+    function setupMenu() {
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        if (menuBtn && navMenu) {
+            menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+            document.addEventListener('click', (e) => {
+                if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadSiteData();
+        loadMemberList();
+        setupMenu();
+    });
     </script>
 </body>
 </html>
+
 
 
 
