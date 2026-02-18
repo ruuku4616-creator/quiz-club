@@ -33,7 +33,7 @@ collections:
     fields:
       - {label: "投稿者名", name: "author", widget: "string", required: false, default: "SIQ部員"}
       - {label: "タイトル", name: "title", widget: "string"}
-      - {label: "日付", name: "date", widget: "datetime", format: "YYYY-MM-DD", dateFormat: "YYYY-MM-DD", timeFormat: false}
+      - {label: "日付", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false}
       - {label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false}
       - {label: "本文", name: "body", widget: "markdown"}
 
@@ -74,3 +74,4 @@ collections:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "投稿日", name: "date", widget: "datetime", format: "YYYY-MM-DD", dateFormat: "YYYY-MM-DD", timeFormat: false}
       - {label: "本文", name: "body", widget: "markdown"}
+
