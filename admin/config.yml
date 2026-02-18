@@ -1,6 +1,5 @@
 backend:
   name: git-gateway
-  repo: ruuku4616-creator/quiz_club # ←ここがGitHubの「ユーザー名/リポジトリ名」と完全に一致しているか再確認してください
   branch: main
 
 locale: 'ja'
@@ -45,3 +44,4 @@ collections:
       - {label: "タイトル（管理用）", name: "title", widget: "string"}
       - {label: "問題文と回答", name: "body", widget: "text"}
 # (中略：他のコレクションも同様に date_format に統一)
+
