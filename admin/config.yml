@@ -14,10 +14,11 @@ collections:
         name: "index"
         file: "data/index.json"
         fields:
-          - {label: "サイトタイトル", name: "site_title", widget: "string"}
-          - {label: "キャッチコピー", name: "site_subtitle", widget: "string"}
-          - {label: "活動紹介文", name: "intro_text", widget: "text"}
-          - {label: "ロゴ画像", name: "logo_image", widget: "image", required: false}
+         - { name: "site_title_en", label: "ヘッダー名 (英語)", widget: "string", default: "Shibaura Institute of Quiz" }
+         - { name: "site_title_jp", label: "トップページ見出し (日本語)", widget: "string", default: "芝浦工業大学柏高等学校クイズ研究会" }
+         - { name: "site_subtitle", label: "サブタイトル", widget: "string" }
+         - { name: "intro_text", label: "紹介文", widget: "text" }
+         - { name: "logo_image", label: "ロゴ画像", widget: "image", required: false }
 
   - name: "active"
     label: "活動報告"
@@ -66,4 +67,5 @@ collections:
       - {label: "タイトル", name: "title", widget: "string"}
       - {label: "投稿日", name: "date", widget: "datetime"}
       - {label: "本文", name: "body", widget: "markdown"}
+
 
