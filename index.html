@@ -95,12 +95,16 @@
             }
         } catch (e) { console.error(e); }
     }
-    // 2. 活動報告の読み込み
+    // 2. 活動報告の読み込み（安全版）
     async function loadBlogPosts() {
         const listElement = document.getElementById('blog-list');
         try {
             const response = await fetch('data/blog-list.json');
-            if (!response.ok) throw new Error();
+            // ファイルがない場合はエラーを投げず、静かに終了する
+            if (!response.ok) {
+                listElement.innerHTML = '<li>記事リストを準備中です。</li>';
+                return;
+            }
             const posts = await response.json();
             listElement.innerHTML = '';
             posts.forEach(postName => {
@@ -109,47 +113,43 @@
                 listElement.appendChild(li);
             });
         } catch (error) {
+            console.log("Blog list not found, skipping...");
             listElement.innerHTML = '<li>記事リストを準備中です。</li>';
         }
     }
 
-    // 3. 最新クイズの読み込み
+    // 3. 最新クイズの読み込み（安全版）
     async function loadTopQuiz() {
         try {
             const response = await fetch('data/quiz-list.json');
+            if (!response.ok) throw new Error("Quiz list not found");
+            
             const quizFiles = await response.json();
-            if (quizFiles.length > 0) {
+            if (quizFiles && quizFiles.length > 0) {
                 const latestQuiz = quizFiles[0];
                 const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
-                let text = await quizRes.text();
+                if (!quizRes.ok) throw new Error("Quiz file not found");
                 
-                // --- 修正1: 管理用データ（--- で囲まれた部分）を削除 ---
-                // メタデータを取り除く（2番目の --- 以降を本文とする）
+                let text = await quizRes.text();
                 const parts = text.split('---');
                 let mainContent = "";
                 let answerContent = "クリックして回答を表示";
                 
                 if (parts.length >= 3) {
-                    // index 0,1 はメタデータ用、2が問題、3がある場合はそれが答え
                     mainContent = parts[2].trim();
-                    if (parts[3]) {
-                        answerContent = parts[3].trim();
-                    }
-                }　else {
-                    // 万が一形式が違う場合の予備処理
+                    if (parts[3]) answerContent = parts[3].trim();
+                } else {
                     mainContent = text;
                 }
                 
-                // --- 修正2: MarkdownをHTMLに変換して反映 ---
                 document.getElementById('top-quiz-question').innerHTML = marked.parse(mainContent);
                 document.getElementById('top-quiz-answer').innerHTML = marked.parse(answerContent);
             }
         } catch (e) {
-            console.error(e);
+            console.log("Quiz data not available:", e.message);
             document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
         }
     }
-
     // 4. メニュー開閉設定
     const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
@@ -174,8 +174,24 @@
         answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
     }
 
-    // ページ読み込み時にすべて実行
     window.addEventListener('DOMContentLoaded', () => {
+        // 1. まずメニューを動かせるようにする（最優先）
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        
+        if (menuBtn && navMenu) {
+            menuBtn.onclick = (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+            };
+            document.onclick = (e) => {
+                if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            };
+        }
+
+        // 2. その後にデータを読み込む（失敗してもメニューには影響しない）
         loadSiteData();
         loadBlogPosts();
         loadTopQuiz();
@@ -183,6 +199,7 @@
 </script>
 </body>
 </html>
+
 
 
 
