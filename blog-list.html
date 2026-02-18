@@ -71,40 +71,49 @@
             
             list.innerHTML = '';
 
-            for (const name of posts) {
-                let thumbUrl = "";
+            // ... (前略) ...
+for (const name of posts) {
+    let thumbUrl = "";
+    let postDate = "";
+    let postAuthor = "";
 
-                try {
-                    // 各部員ブログの.mdファイルを読み込み（フォルダ名に注意）
-                    const postRes = await fetch(`data/members_blog/${name}.md`);
-                    const postText = await postRes.text();
-                    
-                    const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
-                    if (thumbMatch && thumbMatch[1]) {
-                        thumbUrl = thumbMatch[1];
-                    }
-                } catch (e) { console.log("画像取得失敗:", name); }
+    try {
+        // フォルダ名は active.html なら 'blog'、blog-list.html なら 'members_blog'
+        const folder = (document.getElementById('full-list')) ? 'blog' : 'members_blog';
+        const postRes = await fetch(`data/${folder}/${name}.md`);
+        const postText = await postRes.text();
+        
+        // メタデータを抽出
+        const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
+        const dateMatch = postText.match(/date:\s*["']?(.*?)["']?(\n|$)/);
+        const authorMatch = postText.match(/author:\s*["']?(.*?)["']?(\n|$)/);
 
-                // ...（画像取得の処理はそのまま）
-                const card = document.createElement('a');
-                card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`;
-                card.className = 'post-card';
-                
-                // 画像が存在する場合のみ img タグを生成し、親に 'has-image' クラスをつける
-                let imageHtml = '';
-                if (thumbUrl) {
-                    card.classList.add('has-image');
-                    imageHtml = `<img src="${thumbUrl}" class="post-card-thumb" alt="${name}">`;
-                }
-                card.innerHTML = `
-                ${imageHtml}
-                <div class="post-card-content">
-                <h3 class="post-card-title">${name}</h3>
-                <div class="post-card-meta">記事を読む →</div>
-                </div>
-                `;
-                list.appendChild(card);
-            }
+        if (thumbMatch) thumbUrl = thumbMatch[1];
+        if (dateMatch) postDate = dateMatch[1].substring(0, 10); // YYYY-MM-DD形式
+        if (authorMatch) postAuthor = authorMatch[1];
+    } catch (e) { console.log("データ取得失敗:", name); }
+
+    const card = document.createElement('a');
+    card.href = `blog.html?folder=${(document.getElementById('full-list')) ? 'blog' : 'members_blog'}&post=${encodeURIComponent(name)}`;
+    card.className = 'post-card';
+    
+    let imageHtml = thumbUrl ? `<img src="${thumbUrl}" class="post-card-thumb" alt="${name}">` : '';
+    if (thumbUrl) card.classList.add('has-image');
+    
+    // カードの中身をリッチにする
+    card.innerHTML = `
+        ${imageHtml}
+        <div class="post-card-content">
+            <h3 class="post-card-title">${name}</h3>
+            <div class="post-card-meta">
+                ${postDate ? `<span>📅 ${postDate}</span>` : ''}
+                ${postAuthor ? `<span>👤 ${postAuthor}</span>` : ''}
+            </div>
+            <div class="post-card-more">記事を読む →</div>
+        </div>
+    `;
+    list.appendChild(card);
+}
         } catch (e) {
             console.error(e);
             list.innerHTML = '<p>記事がまだありません。</p>';
