@@ -66,32 +66,42 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
-    // 1. サイト基本データの読み込み
+    // 1. サイト基本データの読み込み（JSONに頼らず直接制御）
     async function loadSiteData() {
+        // --- 設定値（ここで直接変更できます） ---
+        const SITE_NAME_EN = "Shibaura Institute of Quiz";
+        const SITE_NAME_JP = "芝浦工業大学柏高等学校クイズ研究会";
+        const SUB_TITLE = "Shibaura Institute of Technology Kashiwa Junior & Senior High School";
+        const INTRO_TEXT = "私たちは芝浦工業大学柏高等学校で活動しているクイズ研究会（SIQ）です。";
+        // ---------------------------------------
+
+        // 1. ヘッダーのロゴテキストを英語で固定
+        document.getElementById('site-logo-text').innerText = SITE_NAME_EN;
+
+        // 2. トップページの見出しを日本語で設定（学校の後で改行を入れる）
+        const formattedTitle = SITE_NAME_JP.replace("学校", "学校<br class='sp-only'>");
+        document.getElementById('main-title').innerHTML = formattedTitle;
+
+        // 3. サブタイトルと紹介文を設定
+        document.getElementById('sub-title').innerText = SUB_TITLE;
+        document.getElementById('intro-content').innerText = INTRO_TEXT;
+
+        // 4. ロゴ画像のみ、もしJSONがあれば読み込む（なければデフォルト）
         try {
             const response = await fetch('data/index.json');
-            const data = await response.json();
-            
-            // ★トップページの見出しは JSON のデータを使う
-            // ここで改行用のタグ <br class="sp-only"> を差し込む
-            const mainTitle = data.site_title || "芝浦工業大学柏高等学校クイズ研究会";
-            const formattedTitle = mainTitle.replace("学校", "学校<br class='sp-only'>");
-            document.getElementById('main-title').innerHTML = formattedTitle;
-
-            document.getElementById('sub-title').innerText = data.site_subtitle || "";
-            document.getElementById('intro-content').innerText = data.intro_text || "";
-            
-            // ★ヘッダーの文字は JSON を無視して英語で固定する
-            document.getElementById('site-logo-text').innerText = "Shibaura Institute of Quiz";
-            
-            const logoImg = document.getElementById('site-logo-img');
-            const logoPlaceholder = document.getElementById('logo-q-placeholder');
-            if (data.logo_image) {
-                logoImg.src = data.logo_image;
-                logoImg.style.display = 'block';
-                if(logoPlaceholder) logoPlaceholder.style.display = 'none';
+            if (response.ok) {
+                const data = await response.json();
+                const logoImg = document.getElementById('site-logo-img');
+                const logoPlaceholder = document.getElementById('logo-q-placeholder');
+                if (data.logo_image) {
+                    logoImg.src = data.logo_image;
+                    logoImg.style.display = 'block';
+                    if(logoPlaceholder) logoPlaceholder.style.display = 'none';
+                }
             }
-        } catch (e) { console.error("Site data load error:", e); }
+        } catch (e) { 
+            console.log("JSONがないためロゴはデフォルト表示になります"); 
+        }
     }
     // 2. 活動報告の読み込み
     async function loadBlogPosts() {
@@ -181,6 +191,7 @@
 </script>
 </body>
 </html>
+
 
 
 
