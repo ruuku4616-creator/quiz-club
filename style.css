@@ -293,3 +293,78 @@ th { color: var(--accent-green); }
         margin-top: 70px;
     }
 }
+/* メニューの初期状態：右側に隠す */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* これで画面の外に隠れます */
+    width: 250px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 1000;
+    transition: 0.3s;
+    padding-top: 60px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* activeクラスがついた時だけ表示する */
+.nav-menu.active {
+    right: 0;
+}
+
+/* ロゴエリアの固定 */
+.site-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 900;
+}
+/* メニューの初期状態：右側に隠す */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* これで画面の外に隠れます */
+    width: 250px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 1000;
+    transition: 0.3s;
+    padding-top: 60px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* activeクラスがついた時だけ表示する */
+.nav-menu.active {
+    right: 0;
+}
+
+/* ロゴエリアの固定 */
+.site-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 900;
+}
+
+/* 三本線ボタンの固定 */
+.menu-btn {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    z-index: 1100;
+    cursor: pointer;
+}
