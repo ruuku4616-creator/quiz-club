@@ -8,28 +8,27 @@
     --text-white: #e0e0e0;
 }
 
+/* --- 基本設定 --- */
 body {
     background-color: var(--main-bg);
     color: var(--text-white);
-    /* ↓ ここを Noto Sans JP に指定 */
     font-family: 'Noto Sans JP', sans-serif;
     margin: 0;
-    line-height: 1.8; /* 1.6より1.8くらいが読みやすいです */
+    line-height: 1.8;
     letter-spacing: 0.03em;
 }
 
-/* ついでに記事本文の行間も広げておくと綺麗です */
 #post-content {
     line-height: 2;
 }
 
-/* --- ヘッダー（太さを復活） --- */
+/* --- ヘッダー --- */
 header {
     background: linear-gradient(135deg, var(--deep-green), #00251a);
-    padding: 100px 20px; /* 上下の余白を大きくして太くしました */
+    padding: 100px 20px;
     text-align: center;
     border-bottom: 4px solid var(--accent-green);
-    margin-top: 50px; /* ナビの高さ分空ける */
+    margin-top: 50px;
 }
 
 header h1 {
@@ -38,8 +37,7 @@ header h1 {
     letter-spacing: 2px;
 }
 
-/* --- ナビゲーション --- */
-/* --- ナビゲーションバー全体の調整 --- */
+/* --- 固定ナビゲーションバー --- */
 nav {
     background-color: var(--nav-bg);
     height: 60px;
@@ -49,17 +47,11 @@ nav {
     left: 0;
     display: flex;
     align-items: center;
-    /* ここを調整：ロゴは左、ボタンは右に配置するため */
     justify-content: flex-start; 
     padding: 0 20px;
     box-sizing: border-box;
     border-bottom: 2px solid var(--deep-green);
-    z-index: 1000; /* バー自体は1000 */
-}
-
-/* もし .nav-links という名前の古い設定が残っていたら、これを追加して無効化してください */
-.nav-links {
-    display: none !important;
+    z-index: 1000;
 }
 
 .logo-area {
@@ -67,6 +59,8 @@ nav {
     align-items: center;
     text-decoration: none;
     color: var(--text-white);
+    max-width: calc(100% - 70px);
+    overflow: hidden;
 }
 
 .logo-placeholder {
@@ -76,77 +70,7 @@ nav {
     margin-right: 10px;
     display: flex; align-items: center; justify-content: center;
     border: 1px solid var(--accent-green);
-}
-
-.menu-icon { cursor: pointer; padding: 10px; }
-.menu-icon span {
-    display: block; width: 25px; height: 3px;
-    background-color: var(--text-white); margin: 5px 0;
-}
-
-.nav-links {
-    position: fixed; top: 60px; right: -100%;
-    width: 250px; height: calc(100vh - 60px);
-    background-color: var(--nav-bg);
-    display: flex; flex-direction: column;
-    padding: 20px; transition: 0.4s;
-    border-left: 2px solid var(--deep-green);
-}
-
-.nav-links.active { right: 0; }
-.nav-links a {
-    color: var(--text-white); text-decoration: none;
-    padding: 15px; border-radius: 5px;
-}
-
-/* --- コンテンツ --- */
-.container { max-width: 800px; margin: 40px auto; padding: 20px; }
-
-.section {
-    background: var(--card-bg);
-    padding: 25px; border-radius: 10px;
-    margin-bottom: 40px; border-left: 5px solid var(--deep-green);
-}
-
-h2 { color: var(--accent-green); margin-top: 0; }
-
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 12px; border-bottom: 1px solid #333; text-align: left; }
-th { color: var(--accent-green); }
-
-/* --- クイズボックスと回答 --- */
-.quiz-box {
-    background: #252525;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px dashed var(--accent-green);
-    cursor: pointer;
-    transition: 0.3s;
-    margin: 15px 0;
-}
-
-.quiz-box:hover {
-    background: #2a2a2a;
-    border-style: solid;
-}
-
-.answer {
-    display: none; /* 初期は非表示 */
-    color: var(--accent-green);
-    font-weight: bold;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #333;
-}
-
-/* --- ロゴエリアの微調整（重なり防止） --- */
-.logo-area {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--text-white);
-    max-width: calc(100% - 70px); /* 右側のメニューボタン用のスペースを確保 */
-    overflow: hidden; /* はみ出し防止 */
+    flex-shrink: 0;
 }
 
 /* --- ハンバーガーメニューボタン --- */
@@ -154,7 +78,7 @@ th { color: var(--accent-green); }
     position: fixed;
     top: 10px;
     right: 20px;
-    z-index: 3000; /* メニュー本体(2500)よりもさらに上に */
+    z-index: 3000;
     cursor: pointer;
     background: var(--accent-green);
     padding: 10px;
@@ -163,53 +87,76 @@ th { color: var(--accent-green); }
     flex-direction: column;
     gap: 5px;
 }
-/* --- ハンバーガーメニューボタンの「線」の設定 --- */
+
 .menu-btn span {
     display: block;
     width: 25px;
     height: 3px;
-    background: white; /* これで白い線が見えるようになります */
+    background: white;
     transition: 0.3s;
 }
 
-/* --- メニュー本体 --- */
+/* --- スライドメニュー本体 --- */
 .nav-menu {
-    position: fixed !important;
-    top: 0 !important;
-    left: auto !important;
-    right: -280px !important; 
-    width: 280px !important; 
-    height: 100vh !important;
-    background: #000000 !important; 
-    padding-top: 80px !important;
-    transition: 0.3s ease-out !important;
-    z-index: 2500 !important;
-    border-left: 2px solid var(--accent-green) !important;
-    display: block !important;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.5); /* 影をつけて奥行きを出す */
+    position: fixed;
+    top: 0;
+    right: -300px; /* 初期状態は隠す */
+    width: 280px;
+    height: 100vh;
+    background: #000000;
+    padding-top: 80px;
+    transition: 0.3s ease-out;
+    z-index: 2500;
+    border-left: 2px solid var(--accent-green);
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
 }
 
 .nav-menu.active {
-    right: 0 !important;
+    right: 0;
 }
 
-/* --- ナビゲーションメニュー内のリンク色設定 --- */
+.nav-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
 .nav-menu ul li a {
     display: block;
     padding: 20px 30px;
-    color: var(--text-white) !important; /* 強制的に白にする */
-    text-decoration: none; /* 下線を消す */
+    color: var(--text-white);
+    text-decoration: none;
     font-size: 1.1rem;
     border-bottom: 1px solid #222;
     transition: background 0.3s;
 }
 
-/* マウスを乗せた（ホバー）時の挙動 */
 .nav-menu ul li a:hover {
     background: var(--deep-green);
-    color: var(--accent-green) !important; /* ホバー時にアクセントカラーにする */
+    color: var(--accent-green);
 }
-/* --- 記事カードのデザイン --- */
+
+/* --- レイアウトコンテナ --- */
+.container { 
+    max-width: 900px; 
+    margin: 40px auto; 
+    padding: 20px; 
+}
+
+.section {
+    background: var(--card-bg);
+    padding: 25px; 
+    border-radius: 10px;
+    margin-bottom: 40px; 
+    border-left: 5px solid var(--deep-green);
+}
+
+h2 { color: var(--accent-green); margin-top: 0; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px; border-bottom: 1px solid #333; text-align: left; }
+th { color: var(--accent-green); }
+
+/* --- 記事・ブログカードのデザイン --- */
 .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -227,121 +174,122 @@ th { color: var(--accent-green); }
     color: inherit;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .post-card:hover {
     transform: translateY(-5px);
     border-color: var(--accent-green);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* 画像がない場合のカードの高さ調整 */
 .post-card-thumb {
     width: 100%;
     height: 160px;
     object-fit: cover;
     background: #252525;
-    display: none; /* 初期状態では非表示にしておく */
+    display: none;
 }
 
-/* 画像があるときだけこのクラスをJSで追加して表示する */
 .has-image .post-card-thumb {
     display: block;
 }
 
 .post-card-content {
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .post-card-title {
     margin: 0 0 10px 0;
     font-size: 1.1rem;
     color: var(--accent-green);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-weight: bold;
 }
 
 .post-card-meta {
     font-size: 0.8rem;
     color: #888;
-}
-/* クイズカード専用の調整 */
-.quiz-card {
-    border-left: 5px solid var(--accent-green); /* 左側にアクセントライン */
-}
-
-.quiz-answer-preview {
-    color: #ccc;
-    font-size: 0.95rem;
-    animation: fadeIn 0.3s ease;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+.post-card-more {
+    margin-top: auto;
+    font-size: 0.85rem;
+    color: var(--accent-green);
+    font-weight: bold;
 }
 
-/* --- スマホ向けの調整 --- */
-/* --- スマホ・タブレット向け調整 (画面幅768px以下) --- */
-@media (max-width: 768px) {
-    /* 1. ヘッダー文字のサイズと改行防止 */
-    #site-logo-text {
-        font-size: 0.85rem; /* 1行に収まるように小さく */
-        white-space: nowrap; /* 強制的に1行にする */
-        letter-spacing: -0.02em; /* 文字間隔をわずかに詰める */
-    }
-
-    /* 2. ロゴ画像のサイズ調整 */
-    #site-logo-img {
-        height: 35px !important;
-        margin-right: 5px !important;
-    }
-
-    /* 3. メニューの幅を制限して右から出す */
-    .nav-menu {
-        width: 65%; /* 画面の約2/3に抑える */
-        right: -65%; /* 最初は画面の外へ */
-        left: auto;  /* 左固定を解除 */
-        transition: right 0.3s ease-in-out; /* ふわっと動かす */
-    }
-
-    .nav-menu.active {
-        right: 0; /* アクティブ時に画面内へ */
-    }
-
-    /* 4. コンテナの余白をスマホ最適化 */
-    .container {
-        padding: 15px;
-        margin-top: 70px; /* ヘッダーとの距離を微調整 */
-    }
-
-    /* 5. 見出しのサイズを適切に */
-    h1 { font-size: 1.5rem !important; }
-    h2 { font-size: 1.25rem; }
+/* --- クイズボックス --- */
+.quiz-box {
+    background: #252525;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px dashed var(--accent-green);
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 15px 0;
 }
-/* PCでは改行させない */
+
+.quiz-box:hover {
+    background: #2a2a2a;
+    border-style: solid;
+}
+
+.answer {
+    display: none;
+    color: var(--accent-green);
+    font-weight: bold;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
+}
+
+/* --- レスポンシブ (スマホ対応) --- */
 .sp-only {
     display: none;
 }
 
 @media (max-width: 768px) {
-    /* スマホの時だけ改行を有効にする */
     .sp-only {
         display: block;
-        content: "";
-        margin-top: 5px;
     }
-    /* 見出しの微調整 */
+
+    #site-logo-text {
+        font-size: 0.85rem;
+        white-space: nowrap;
+        letter-spacing: -0.02em;
+    }
+
+    #site-logo-img {
+        height: 35px !important;
+        margin-right: 5px !important;
+    }
+
+    .nav-menu {
+        width: 70%;
+        right: -70%;
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+
+    header {
+        padding: 60px 15px;
+    }
+
     #main-title {
+        font-size: 1.6rem !important;
         line-height: 1.4;
-        font-size: 1.5rem;
+    }
+
+    .container {
+        padding: 15px;
+        margin-top: 70px;
     }
 }
-
-
-
-
-
-
-
