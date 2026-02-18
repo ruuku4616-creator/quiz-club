@@ -43,27 +43,26 @@ collections:
     fields:
       - {label: "タイトル（管理用）", name: "title", widget: "string"}
       - {label: "問題文と回答", name: "body", widget: "text"}
-# (中略：他のコレクションも同様に date_format に統一)
-- name: "event"
+
+  - name: "event"
     label: "芝柏杯 特設ページ"
     files:
       - label: "大会特設ページ"
         name: "event_page"
-        file: "data/event.json" # ファイルパスが正しいか確認してください
+        file: "data/event.json"
         fields:
           - { name: "title", label: "タイトル", widget: "string" }
           - { name: "body", label: "本文", widget: "markdown" }
 
   - name: "member_blog"
     label: "部員ブログ"
-    folder: "data/members_blog" # 以前のコードで members_blog を参照していたので合わせます
+    folder: "data/members_blog"
     create: true
+    summary: "{{title}} ({{date}})"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "投稿者名", name: "author", widget: "string", default: "SIQ部員" }
       - { label: "タイトル", name: "title", widget: "string" }
-      - { label: "日付", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "日付", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false }
       - { label: "本文", name: "body", widget: "markdown" }
-
-
