@@ -96,6 +96,8 @@ nav.site-navbar {
 
 /* メニュー内のリンクの基本設定 */
 .nav-menu ul li a {
+    display: block;
+    padding: 15px 20px
     color: white; /* 通常時は白 */
     text-decoration: none;
     transition: color 0.3s ease; /* 色の変化を滑らかにする */
@@ -134,4 +136,5 @@ h2 { color: var(--accent-green); }
     .nav-menu { width: 70%; right: -70%; }
     #main-title { font-size: 1.6rem !important; }
 }
+
 
