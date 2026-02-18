@@ -97,7 +97,7 @@
 
             document.getElementById('site-logo-text').innerText = data.site_title_en || "Shibaura Institute of Quiz";
             const mainTitle = data.site_title_jp || "芝浦工業大学柏高等学校クイズ研究会";
-            document.getElementById('main-title').innerHTML = mainTitle.replace("学校", "学校<br class='sp-only'>");
+            document.getElementById('main-title').innerText = mainTitle;
             document.getElementById('sub-title').innerText = data.site_subtitle || "";
             document.getElementById('intro-content').innerText = data.intro_text || "";
 
@@ -177,5 +177,6 @@
 </script>
 </body>
 </html>
+
 
 
