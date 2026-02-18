@@ -43,10 +43,14 @@
     </div>
 
     <script>
-        async function loadSiteData() {
+        <script>
+    // --- 1. サイト基本データ（ロゴなど）の読み込み ---
+    async function loadSiteData() {
         try {
             const response = await fetch('data/index.json');
+            if (!response.ok) return;
             const data = await response.json();
+
             document.getElementById('site-logo-text').innerText = data.site_title_en || "Shibaura Institute of Quiz";
             const logoImg = document.getElementById('site-logo-img');
             if (data.logo_image) {
@@ -56,61 +60,69 @@
                     document.getElementById('logo-q-placeholder').style.display = 'none';
                 }
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Logo load failed:", e); }
     }
 
-    async function loadActiveList() { // 関数名変更
-        const list = document.getElementById('active-blog-list'); // IDも合わせる
+    // --- 2. 活動報告リストの読み込み（カード形式） ---
+    async function loadActiveList() {
+        const list = document.getElementById('active-blog-list');
+        if (!list) return;
+
         try {
-            const response = await fetch('data/blog-list.json'); // 参照JSONを変更
+            const response = await fetch('data/blog-list.json');
             const posts = await response.json();
-            
             list.innerHTML = '';
 
             for (const name of posts) {
-                // ... (略) ...
-                const folder = 'blog'; // 読み込みフォルダを blog に
-                const postRes = await fetch(`data/${folder}/${name}.md`);
-                // ... (略) ...
+                try {
+                    const postRes = await fetch(`data/blog/${name}.md`);
+                    const text = await postRes.text();
+                    
+                    // フロントマター（---で囲まれた部分）からデータを簡易抽出
+                    const dateMatch = text.match(/date:\s*["']?([\d-]+)["']?/);
+                    const authorMatch = text.match(/author:\s*["']?([^"'\n]+)["']?/);
+                    const thumbMatch = text.match(/thumbnail:\s*["']?([^"'\n]+)["']?/);
 
-                const card = document.createElement('a');
-                // リンク先のパラメータを folder=blog に
-                card.href = `blog.html?folder=blog&post=${encodeURIComponent(name)}`;
-                card.className = 'post-card';
-                // ... (以下、組み立ては同じ) ...
-            }
-        } catch (e) { ... }
-    }
-                // 3. カードのHTML組み立て
-                const card = document.createElement('a');
-                card.href = `blog.html?folder=blog&post=${encodeURIComponent(name)}`;
-                card.className = 'post-card';
-                if (thumbUrl) card.classList.add('has-image');
-                
-                card.innerHTML = `
-                    <img src="${thumbUrl}" class="post-card-thumb" alt="${name}">
-                    <div class="post-card-content">
-                        <h3 class="post-card-title">${name}</h3>
-                        <div class="post-card-meta">
-                            <span>📅 ${postDate || '日付なし'}</span>
-                            <span>👤 ${postAuthor}</span>
+                    const postDate = dateMatch ? dateMatch[1] : '';
+                    const postAuthor = authorMatch ? authorMatch[1] : 'SIQ部員';
+                    const thumbUrl = thumbMatch ? thumbMatch[1] : '';
+
+                    const card = document.createElement('a');
+                    card.href = `blog.html?folder=blog&post=${encodeURIComponent(name)}`;
+                    card.className = 'post-card';
+                    if (thumbUrl) card.classList.add('has-image');
+                    
+                    card.innerHTML = `
+                        ${thumbUrl ? `<img src="${thumbUrl}" class="post-card-thumb" alt="${name}">` : ''}
+                        <div class="post-card-content">
+                            <h3 class="post-card-title">${name}</h3>
+                            <div class="post-card-meta">
+                                <span>📅 ${postDate || '日付なし'}</span>
+                                <span>👤 ${postAuthor}</span>
+                            </div>
+                            <div class="post-card-more">記事を読む →</div>
                         </div>
-                        <div class="post-card-more">記事を読む →</div>
-                    </div>
-                `;
-                list.appendChild(card);
+                    `;
+                    list.appendChild(card);
+                } catch (err) {
+                    console.error(`Post ${name} load failed:`, err);
+                }
             }
         } catch (e) {
-            console.error(e);
+            console.error("List load failed:", e);
             list.innerHTML = '<p>記事が読み込めないか、まだありません。</p>';
         }
     }
 
+    // --- 3. メニュー開閉設定 ---
     function setupMenu() {
         const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
         if (menuBtn && navMenu) {
-            menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+            });
             document.addEventListener('click', (e) => {
                 if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
                     navMenu.classList.remove('active');
@@ -119,14 +131,17 @@
         }
     }
 
+    // --- 4. 実行 ---
     window.addEventListener('DOMContentLoaded', () => {
-        loadSiteData();
-        loadMemberList();
-        setupMenu();
+        loadSiteData();   // ロゴ反映
+        loadActiveList(); // 記事リスト反映
+        setupMenu();      // メニュー動作反映
     });
+</script>
     </script>
 </body>
 </html>
+
 
 
 
