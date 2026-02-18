@@ -162,9 +162,75 @@ h2 { color: var(--accent-green); }
     #main-title { font-size: 1.6rem !important; }
 }
 
+/* --- 記事一覧カードのデザイン --- */
 
+/* 1. カード全体の外箱 */
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 自動で並べる */
+    gap: 20px;
+    margin-top: 20px;
+}
 
+.post-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card-bg); /* 変数の濃いグレーを使用 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none; /* 青文字・下線を消す */
+    color: var(--text-white); /* 文字色を白に固定 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    height: 100%;
+}
 
+/* ホバー時の演出 */
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border-color: var(--accent-green); /* ホバーすると枠が緑に光る */
+}
 
+/* 2. 画像部分 */
+.post-card-thumb {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--deep-green);
+}
 
+/* 3. テキスト部分の箱 */
+.post-card-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
 
+/* 4. タイトル */
+.post-card-title {
+    margin: 0 0 10px 0;
+    font-size: 1.15rem;
+    color: var(--accent-green); /* タイトルはアクセントカラーの緑 */
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+/* 5. 日付や投稿者情報 */
+.post-card-meta {
+    font-size: 0.85rem;
+    color: #aaaaaa; /* 少し暗めの文字 */
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+/* 6. 「記事を読む」リンクボタン風テキスト */
+.post-card-more {
+    margin-top: auto;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--accent-green);
+    text-align: right;
+}
