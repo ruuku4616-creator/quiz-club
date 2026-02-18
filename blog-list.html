@@ -68,49 +68,47 @@
             
             list.innerHTML = ''; // 読み込み中表示を消す
 
-            // 2. 各記事の内容（Markdown）を解析してカードを作成
-            for (const name of posts) {
-                let thumbUrl = "";
-                let postDate = "";
-                let postAuthor = "SIQ部員"; // デフォルト名
+            // --- 2. 各記事の内容（Markdown）を解析してカードを作成 ---
+for (const name of posts) {
+    let thumbUrl = "";
+    let postDate = "";
+    let postAuthor = "SIQ部員";
 
-                try {
-                    // 部員ブログなのでフォルダは 'members_blog' 固定
-                    const folder = 'members_blog';
-                    const postRes = await fetch(`data/${folder}/${name}.md`);
-                    const postText = await postRes.text();
-                    
-                    // メタデータを正規表現で抽出
-                    const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
-                    const dateMatch = postText.match(/date:\s*["']?(.*?)["']?(\n|$)/);
-                    const authorMatch = postText.match(/author:\s*["']?(.*?)["']?(\n|$)/);
+    try {
+        const folder = 'members_blog';
+        const postRes = await fetch(`data/${folder}/${name}.md`);
+        const postText = await postRes.text();
+        
+        const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
+        const dateMatch = postText.match(/date:\s*["']?(.*?)["']?(\n|$)/);
+        const authorMatch = postText.match(/author:\s*["']?(.*?)["']?(\n|$)/);
 
-                    if (thumbMatch) thumbUrl = thumbMatch[1];
-                    if (dateMatch) postDate = dateMatch[1].substring(0, 10).replace(/-/g, '.');
-                    if (authorMatch && authorMatch[1].trim() !== "") postAuthor = authorMatch[1];
-                } catch (e) { 
-                    console.log("データ取得失敗:", name); 
-                }
+        if (thumbMatch && thumbMatch[1].trim() !== "") thumbUrl = thumbMatch[1]; // 空文字チェック追加
+        if (dateMatch) postDate = dateMatch[1].substring(0, 10).replace(/-/g, '.');
+        if (authorMatch && authorMatch[1].trim() !== "") postAuthor = authorMatch[1];
+    } catch (e) { 
+        console.log("データ取得失敗:", name); 
+    }
 
-                // 3. カードのHTML組み立て
-                const card = document.createElement('a');
-                card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`;
-                card.className = 'post-card';
-                if (thumbUrl) card.classList.add('has-image');
-                
-                card.innerHTML = `
-                    <img src="${thumbUrl}" class="post-card-thumb" alt="${name}">
-                    <div class="post-card-content">
-                        <h3 class="post-card-title">${name}</h3>
-                        <div class="post-card-meta">
-                            <span>📅 ${postDate || '日付なし'}</span>
-                            <span>👤 ${postAuthor}</span>
-                        </div>
-                        <div class="post-card-more">記事を読む →</div>
-                    </div>
-                `;
-                list.appendChild(card);
-            }
+    const card = document.createElement('a');
+    card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`;
+    card.className = 'post-card';
+    if (thumbUrl) card.classList.add('has-image');
+    
+    // ここを修正：thumbUrlがある時だけ<img>タグを生成する
+    card.innerHTML = `
+        ${thumbUrl ? `<img src="${thumbUrl}" class="post-card-thumb" alt="${name}">` : ''}
+        <div class="post-card-content">
+            <h3 class="post-card-title">${name}</h3>
+            <div class="post-card-meta">
+                <span>📅 ${postDate || '日付なし'}</span>
+                <span>👤 ${postAuthor}</span>
+            </div>
+            <div class="post-card-more">記事を読む →</div>
+        </div>
+    `;
+    list.appendChild(card);
+}
         } catch (e) {
             console.error(e);
             list.innerHTML = '<p>記事が読み込めないか、まだありません。</p>';
