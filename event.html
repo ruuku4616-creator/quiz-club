@@ -64,79 +64,60 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
-    // サイト基本データ（ロゴと名称）を読み込む共通関数
-async function loadSiteData() {
-    try {
-        const response = await fetch('data/index.json');
-        const data = await response.json();
-        
-        // サイト名の反映
-        // JSONのタイトルは使わず、英語名で固定する
-document.getElementById('site-logo-text').innerText = "Shibaura Institute of Quiz";
-        
-        // ロゴ画像の反映
-        const logoImg = document.getElementById('site-logo-img');
-        const logoPlaceholder = document.getElementById('logo-q-placeholder');
-        
-        if (data.logo_image) {
-            logoImg.src = data.logo_image;
-            logoImg.style.display = 'inline-block';
-            if (logoPlaceholder) logoPlaceholder.style.display = 'none';
-        }
-    } catch (e) {
-        console.error("ロゴの読み込みに失敗しました:", e);
+    async function loadSiteData() {
+        try {
+            const response = await fetch('data/index.json');
+            const data = await response.json();
+            // ヘッダーは英語固定
+            document.getElementById('site-logo-text').innerText = "Shibaura Institute of Quiz";
+            const logoImg = document.getElementById('site-logo-img');
+            if (data.logo_image) {
+                logoImg.src = data.logo_image;
+                logoImg.style.display = 'inline-block';
+                if (document.getElementById('logo-q-placeholder')) document.getElementById('logo-q-placeholder').style.display = 'none';
+            }
+        } catch (e) { console.error(e); }
     }
-}
+
     async function loadEventData() {
         try {
             const response = await fetch('data/event.json');
             const data = await response.json();
-            
             document.getElementById('ev-title').innerText = data.event_title;
             document.getElementById('ev-copy').innerText = data.event_copy;
             document.getElementById('ev-date').innerText = data.event_date;
             document.getElementById('ev-place').innerText = data.event_place;
             document.getElementById('ev-capacity').innerText = data.event_capacity;
             document.getElementById('ev-fee').innerText = data.event_fee;
-            
-            // Markdownの変換
             document.getElementById('ev-details').innerHTML = marked.parse(data.event_details || "");
-            
-            // エントリーURLがある場合のみボタンを表示
             if (data.entry_url) {
                 document.getElementById('entry-area').style.display = 'block';
                 document.getElementById('ev-entry-btn').href = data.entry_url;
             }
-        } catch (e) {
-            console.error("Event data error:", e);
-        }
+        } catch (e) { console.error(e); }
     }
-    window.addEventListener('DOMContentLoaded', loadEventData);
-</script>e="color: var(--accent-green); text-decoration: none;">← トップページへ戻る</a>
-    </div>
 
-    <script>
+    function setupMenu() {
         const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
-        
-        // メニューボタンをクリックした時の処理
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // ★重要：クリックがdocumentまで伝わるのを防ぐ
-            navMenu.classList.toggle('active');
-        });
-        
-        // メニュー以外の場所をクリックした時に閉じる処理
-        document.addEventListener('click', (e) => {
-            // 「クリックされた場所がメニュー内ではない」かつ「ボタンでもない」なら閉じる
-            if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
-        window.addEventListener('DOMContentLoaded', () => {
-            loadSiteData(); // ★これを追加
-            loadMemberList();
-            setupMenu();
-        });
-    </script>
+        if (menuBtn && navMenu) {
+            menuBtn.onclick = (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+            };
+            document.onclick = (e) => {
+                if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            };
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadSiteData();
+        loadEventData();
+        setupMenu();
+    });
+</script>
 </body>
 </html>
