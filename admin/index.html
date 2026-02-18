@@ -3,25 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIQ Content Manager</title>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
-  
-  <style>
-    /* スマホ最適化用のカスタムCSS */
-    @media (max-width: 768px) {
-      .nc-entryEditor-controlPane + div { display: none !important; }
-      .nc-entryEditor-controlPane { max-width: 100% !important; width: 100% !important; }
-    }
-  </style>
+  <title>Content Manager</title>
 </head>
 <body>
-  <script>
-    // 日本語化設定
-    CMS.registerLocale('ja', {
-      auth: { login: 'ログイン', loggingIn: 'ログイン中...' },
-      app: { header: { content: 'コンテンツ', workflow: 'ワークフロー', media: 'メディア' } },
-      editor: { editor: { card: { draft: '下書き' } } }
-    });
-  </script>
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 </body>
 </html>
