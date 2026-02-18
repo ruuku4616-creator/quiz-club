@@ -65,46 +65,57 @@
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
+    // --- 1. メニュー開閉 (最優先・独立して動作) ---
+    function setupMenu() {
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        
+        if (menuBtn && navMenu) {
+            menuBtn.onclick = function(e) {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+            };
+            document.onclick = function(e) {
+                if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            };
+            console.log("Menu setup completed.");
+        } else {
+            console.error("Menu elements not found.");
+        }
+    }
+
+    // --- 2. サイト基本データ読み込み ---
     async function loadSiteData() {
         try {
             const response = await fetch('data/index.json');
+            if (!response.ok) return;
             const data = await response.json();
 
-            // 1. ヘッダー：英語名を反映（全ページ共通の看板）
-            const headerText = data.site_title_en || "Shibaura Institute of Quiz";
-            document.getElementById('site-logo-text').innerText = headerText;
-
-            // 2. トップ見出し：日本語名を反映 ＋ スマホ改行
+            document.getElementById('site-logo-text').innerText = data.site_title_en || "Shibaura Institute of Quiz";
             const mainTitle = data.site_title_jp || "芝浦工業大学柏高等学校クイズ研究会";
-            const formattedTitle = mainTitle.replace("学校", "学校<br class='sp-only'>");
-            document.getElementById('main-title').innerHTML = formattedTitle;
-            
-            // 3. その他
+            document.getElementById('main-title').innerHTML = mainTitle.replace("学校", "学校<br class='sp-only'>");
             document.getElementById('sub-title').innerText = data.site_subtitle || "";
             document.getElementById('intro-content').innerText = data.intro_text || "";
 
-            // 4. ロゴ
             const logoImg = document.getElementById('site-logo-img');
             if (data.logo_image) {
                 logoImg.src = data.logo_image;
                 logoImg.style.display = 'inline-block';
-                if(document.getElementById('logo-q-placeholder')) {
-                    document.getElementById('logo-q-placeholder').style.display = 'none';
-                }
+                if(document.getElementById('logo-q-placeholder')) document.getElementById('logo-q-placeholder').style.display = 'none';
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { console.warn("Site data load failed:", e); }
     }
-    // 2. 活動報告の読み込み（安全版）
+
+    // --- 3. 活動報告の読み込み ---
     async function loadBlogPosts() {
         const listElement = document.getElementById('blog-list');
         try {
             const response = await fetch('data/blog-list.json');
-            // ファイルがない場合はエラーを投げず、静かに終了する
-            if (!response.ok) {
-                listElement.innerHTML = '<li>記事リストを準備中です。</li>';
-                return;
-            }
+            if (!response.ok) throw new Error("File not found");
             const posts = await response.json();
             listElement.innerHTML = '';
             posts.forEach(postName => {
@@ -113,92 +124,49 @@
                 listElement.appendChild(li);
             });
         } catch (error) {
-            console.log("Blog list not found, skipping...");
             listElement.innerHTML = '<li>記事リストを準備中です。</li>';
         }
     }
 
-    // 3. 最新クイズの読み込み（安全版）
+    // --- 4. 最新クイズの読み込み ---
     async function loadTopQuiz() {
         try {
             const response = await fetch('data/quiz-list.json');
-            if (!response.ok) throw new Error("Quiz list not found");
-            
+            if (!response.ok) return;
             const quizFiles = await response.json();
             if (quizFiles && quizFiles.length > 0) {
-                const latestQuiz = quizFiles[0];
-                const quizRes = await fetch(`data/quiz/${latestQuiz}.md`);
-                if (!quizRes.ok) throw new Error("Quiz file not found");
-                
+                const quizRes = await fetch(`data/quiz/${quizFiles[0]}.md`);
+                if (!quizRes.ok) return;
                 let text = await quizRes.text();
                 const parts = text.split('---');
-                let mainContent = "";
-                let answerContent = "クリックして回答を表示";
-                
-                if (parts.length >= 3) {
-                    mainContent = parts[2].trim();
-                    if (parts[3]) answerContent = parts[3].trim();
-                } else {
-                    mainContent = text;
-                }
+                let mainContent = (parts.length >= 3) ? parts[2].trim() : text;
+                let answerContent = (parts.length >= 4) ? parts[3].trim() : "回答は未設定です";
                 
                 document.getElementById('top-quiz-question').innerHTML = marked.parse(mainContent);
                 document.getElementById('top-quiz-answer').innerHTML = marked.parse(answerContent);
             }
-        } catch (e) {
-            console.log("Quiz data not available:", e.message);
-            document.getElementById('top-quiz-question').innerText = "今日のクイズはお休みです。";
-        }
+        } catch (e) { console.warn("Quiz load failed:", e); }
     }
-    // 4. メニュー開閉設定
-    const menuBtn = document.getElementById('menu-btn');
-        const navMenu = document.getElementById('nav-menu');
-        
-        // メニューボタンをクリックした時の処理
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // ★重要：クリックがdocumentまで伝わるのを防ぐ
-            navMenu.classList.toggle('active');
-        });
-        
-        // メニュー以外の場所をクリックした時に閉じる処理
-        document.addEventListener('click', (e) => {
-            // 「クリックされた場所がメニュー内ではない」かつ「ボタンでもない」なら閉じる
-            if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
 
-    // 5. クイズの答え表示切り替え
+    // --- 5. クイズの答え表示切り替え ---
     function toggleAnswer(element) {
         const answer = element.querySelector('.answer');
-        answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+        if (answer) {
+            answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+        }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-        // 1. まずメニューを動かせるようにする（最優先）
-        const menuBtn = document.getElementById('menu-btn');
-        const navMenu = document.getElementById('nav-menu');
-        
-        if (menuBtn && navMenu) {
-            menuBtn.onclick = (e) => {
-                e.stopPropagation();
-                navMenu.classList.toggle('active');
-            };
-            document.onclick = (e) => {
-                if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                    navMenu.classList.remove('active');
-                }
-            };
-        }
-
-        // 2. その後にデータを読み込む（失敗してもメニューには影響しない）
-        loadSiteData();
+    // --- 実行の順番を厳格に管理 ---
+    window.onload = () => {
+        setupMenu();      // 何より先にメニューを有効化
+        loadSiteData();   // その後にデータ読み込み
         loadBlogPosts();
         loadTopQuiz();
-    });
+    };
 </script>
 </body>
 </html>
+
 
 
 
