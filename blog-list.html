@@ -47,10 +47,7 @@
         try {
             const response = await fetch('data/index.json');
             const data = await response.json();
-            
-            // ヘッダーは管理画面で設定した英語名を出す
             document.getElementById('site-logo-text').innerText = data.site_title_en || "Shibaura Institute of Quiz";
-            
             const logoImg = document.getElementById('site-logo-img');
             if (data.logo_image) {
                 logoImg.src = data.logo_image;
@@ -61,69 +58,69 @@
             }
         } catch (e) { console.error(e); }
     }
+
     async function loadMemberList() {
         const list = document.getElementById('member-blog-list');
         try {
-            // 部員ブログのリストを取得
+            // 1. 部員ブログのリスト(JSON)を取得
             const response = await fetch('data/member-list.json');
-            if (!response.ok) throw new Error();
+            if (!response.ok) throw new Error("JSON not found");
             const posts = await response.json();
             
-            list.innerHTML = '';
+            list.innerHTML = ''; // 読み込み中表示を消す
 
-            // ... (前略) ...
-for (const name of posts) {
-    let thumbUrl = "";
-    let postDate = "";
-    let postAuthor = "";
+            // 2. 各記事の内容（Markdown）を解析してカードを作成
+            for (const name of posts) {
+                let thumbUrl = "";
+                let postDate = "";
+                let postAuthor = "SIQ部員"; // デフォルト名
 
-    try {
-        // フォルダ名は active.html なら 'blog'、blog-list.html なら 'members_blog'
-        const folder = (document.getElementById('full-list')) ? 'blog' : 'members_blog';
-        const postRes = await fetch(`data/${folder}/${name}.md`);
-        const postText = await postRes.text();
-        
-        // メタデータを抽出
-        const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
-        const dateMatch = postText.match(/date:\s*["']?(.*?)["']?(\n|$)/);
-        const authorMatch = postText.match(/author:\s*["']?(.*?)["']?(\n|$)/);
+                try {
+                    // 部員ブログなのでフォルダは 'members_blog' 固定
+                    const folder = 'members_blog';
+                    const postRes = await fetch(`data/${folder}/${name}.md`);
+                    const postText = await postRes.text();
+                    
+                    // メタデータを正規表現で抽出
+                    const thumbMatch = postText.match(/thumbnail:\s*["']?(.*?)["']?(\n|$)/);
+                    const dateMatch = postText.match(/date:\s*["']?(.*?)["']?(\n|$)/);
+                    const authorMatch = postText.match(/author:\s*["']?(.*?)["']?(\n|$)/);
 
-        if (thumbMatch) thumbUrl = thumbMatch[1];
-        if (dateMatch) postDate = dateMatch[1].substring(0, 10); // YYYY-MM-DD形式
-        if (authorMatch) postAuthor = authorMatch[1];
-    } catch (e) { console.log("データ取得失敗:", name); }
+                    if (thumbMatch) thumbUrl = thumbMatch[1];
+                    if (dateMatch) postDate = dateMatch[1].substring(0, 10).replace(/-/g, '.');
+                    if (authorMatch && authorMatch[1].trim() !== "") postAuthor = authorMatch[1];
+                } catch (e) { 
+                    console.log("データ取得失敗:", name); 
+                }
 
-    const card = document.createElement('a');
-    card.href = `blog.html?folder=${(document.getElementById('full-list')) ? 'blog' : 'members_blog'}&post=${encodeURIComponent(name)}`;
-    card.className = 'post-card';
-    
-    let imageHtml = thumbUrl ? `<img src="${thumbUrl}" class="post-card-thumb" alt="${name}">` : '';
-    if (thumbUrl) card.classList.add('has-image');
-    
-    // カードの中身をリッチにする
-    card.innerHTML = `
-        ${imageHtml}
-        <div class="post-card-content">
-            <h3 class="post-card-title">${name}</h3>
-            <div class="post-card-meta">
-                ${postDate ? `<span>📅 ${postDate}</span>` : ''}
-                ${postAuthor ? `<span>👤 ${postAuthor}</span>` : ''}
-            </div>
-            <div class="post-card-more">記事を読む →</div>
-        </div>
-    `;
-    list.appendChild(card);
-}
+                // 3. カードのHTML組み立て
+                const card = document.createElement('a');
+                card.href = `blog.html?folder=members_blog&post=${encodeURIComponent(name)}`;
+                card.className = 'post-card';
+                if (thumbUrl) card.classList.add('has-image');
+                
+                card.innerHTML = `
+                    <img src="${thumbUrl}" class="post-card-thumb" alt="${name}">
+                    <div class="post-card-content">
+                        <h3 class="post-card-title">${name}</h3>
+                        <div class="post-card-meta">
+                            <span>📅 ${postDate || '日付なし'}</span>
+                            <span>👤 ${postAuthor}</span>
+                        </div>
+                        <div class="post-card-more">記事を読む →</div>
+                    </div>
+                `;
+                list.appendChild(card);
+            }
         } catch (e) {
             console.error(e);
-            list.innerHTML = '<p>記事がまだありません。</p>';
+            list.innerHTML = '<p>記事が読み込めないか、まだありません。</p>';
         }
     }
 
     function setupMenu() {
         const menuBtn = document.getElementById('menu-btn');
         const navMenu = document.getElementById('nav-menu');
-        
         if (menuBtn && navMenu) {
             menuBtn.addEventListener('click', () => navMenu.classList.toggle('active'));
             document.addEventListener('click', (e) => {
@@ -135,7 +132,7 @@ for (const name of posts) {
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-        loadSiteData(); // ★これを追加
+        loadSiteData();
         loadMemberList();
         setupMenu();
     });
