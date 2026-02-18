@@ -53,8 +53,8 @@ async function loadSiteData() {
         const data = await response.json();
         
         // サイト名の反映
-        const siteTitle = data.site_title || "Shibaura Institute of Quiz";
-        document.getElementById('site-logo-text').innerText = siteTitle;
+        // JSONのタイトルは使わず、英語名で固定する
+document.getElementById('site-logo-text').innerText = "Shibaura Institute of Quiz";
         
         // ロゴ画像の反映
         const logoImg = document.getElementById('site-logo-img');
