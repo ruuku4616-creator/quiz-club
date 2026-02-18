@@ -89,9 +89,10 @@ nav.site-navbar {
     right: 0;
 }
 
-.nav-menu ul {
-    list-style: none;
-    padding: 0;
+/* メニュー全体の背景（透明感のある黒〜グレー） */
+.nav-menu {
+    background-color: rgba(30, 30, 30, 0.85); /* 0.85の数値で透明度を調整。もっと透けさせたいなら0.7に */
+    backdrop-filter: blur(5px); /* 背景をうっすらぼかすとお洒落になります */
 }
 
 .nav-menu ul li a {
@@ -99,27 +100,21 @@ nav.site-navbar {
     padding: 15px 20px;
     color: white;
     text-decoration: none;
-    transition: all 0.3s ease; /* 色も背景も滑らかに変化させる */
+    transition: all 0.3s ease;
     
-    /* 境界線の設定（項目の下にうっすらグレーの線を引く） */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    /* 境界線：少しだけ白を混ぜてはっきりさせます */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15); 
     
-    /* 背景色の初期設定（うっすらグレー） */
-    background-color: rgba(255, 255, 255, 0.05);
+    /* タブ内：通常時から「グレー」と認識できる明るさに設定 */
+    background-color: rgba(255, 255, 255, 0.1); 
 }
 
-/* 一番下の項目だけは境界線を消す（見た目をスッキリさせるため） */
-.nav-menu ul li:last-child a {
-    border-bottom: none;
-}
-
-/* マウスカーソルを当てた時（ホバー時） */
+/* ホバー（カーソルを当てた）時 */
 .nav-menu ul li a:hover {
     color: var(--accent-green) !important;
     
-    /* 背景をうっすら緑色に変色させる */
-    /* rgbaの最後の 0.1 が透明度です。お好みに合わせて調整してください */
-    background-color: rgba(0, 255, 127, 0.1) !important; 
+    /* カーソルを当てると、より明るいグレー、またはうっすら緑へ */
+    background-color: rgba(0, 255, 127, 0.2) !important; 
 }
 
 /* --- コンテンツエリア --- */
@@ -150,6 +145,7 @@ h2 { color: var(--accent-green); }
     .nav-menu { width: 70%; right: -70%; }
     #main-title { font-size: 1.6rem !important; }
 }
+
 
 
 
