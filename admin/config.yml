@@ -8,6 +8,15 @@ media_folder: "images"
 public_folder: "/images"
 
 collections:
+  - name: "admin_notice"
+    label: "🚨 管理者からのお知らせ"
+    files:
+      - label: "運用ルール"
+        name: "rules"
+        file: "data/admin_rules.json"
+        fields:
+          - { label: "お知らせ", name: "msg", widget: "text", default: "【節約ルール】記事を書いたらSaveのみ！毎日20時に一括でPublishします。" }
+          
   - name: "pages"
     label: "ページ編集"
     files:
@@ -66,3 +75,4 @@ collections:
       - { label: "日付", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false }
       - { label: "本文", name: "body", widget: "markdown" }
+
