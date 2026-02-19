@@ -234,3 +234,8 @@ h2 { color: var(--accent-green); }
     color: var(--accent-green);
     text-align: right;
 }
+/* 記事本文が表示されるクラスやIDに対して追加 */
+#blog-content, #intro-content, .section p {
+    white-space: pre-wrap; /* これで、入力した通りの改行が反映されます */
+    word-wrap: break-word; /* 長い単語でも折り返します */
+}
