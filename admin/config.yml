@@ -4,6 +4,7 @@ backend:
 
 locale: 'ja'
 publish_mode: editorial_workflow
+show_preview_links: false # 余計なプレビュー生成を抑制
 media_folder: "images"
 public_folder: "/images"
 
@@ -75,4 +76,5 @@ collections:
       - { label: "日付", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "アイキャッチ画像", name: "thumbnail", widget: "image", required: false }
       - { label: "本文", name: "body", widget: "markdown" }
+
 
