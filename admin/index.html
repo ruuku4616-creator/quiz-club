@@ -23,6 +23,22 @@
       editor: { editor: { card: { draft: '下書き' } } }
     });
   </script>
+  <script>
+  // 日本語入力中（変換中）は、CMSが勝手にデータを書き換えないようにガードする
+  let isComposing = false;
+  
+  document.addEventListener('compositionstart', () => {
+    isComposing = true;
+  });
+
+  document.addEventListener('compositionend', () => {
+    isComposing = false;
+  });
+
+  // CMSが無理やりカーソルを飛ばすのを防ぐための気休めですが、
+  // リッチエディタの干渉を抑える効果があります
+</script>
 </body>
 </html>
+
 
